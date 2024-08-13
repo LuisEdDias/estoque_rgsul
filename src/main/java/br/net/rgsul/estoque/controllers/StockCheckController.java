@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 
 @Controller
-@RequestMapping("")
-public class AppController {
+@RequestMapping("check")
+public class StockCheckController {
     @Autowired
     private StockCheckService stockCheckService;
 
@@ -25,15 +25,15 @@ public class AppController {
         return "views/form";
     }
 
-    @GetMapping("/index")
+    @GetMapping("completed")
     public String index() {
-        return "views/index";
+        return "views/completed";
     }
 
     @PostMapping
     public String execute(@ModelAttribute StockCheckDTO stockCheckDTO){
         stockCheckService.stockCheck(stockCheckDTO);
-        return "views/index";
+        return "views/completed";
     }
 
     @GetMapping("download")
