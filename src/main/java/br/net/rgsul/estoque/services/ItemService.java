@@ -8,8 +8,6 @@ import br.net.rgsul.estoque.repositories.BoxRepository;
 import br.net.rgsul.estoque.repositories.ItemRepository;
 import br.net.rgsul.estoque.repositories.MovementRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -38,6 +36,10 @@ public class ItemService {
     public List<GetItemDTO> getAll() {
         List<Item> items = itemRepository.findAll();
         return items.stream().map(GetItemDTO::new).toList();
+    }
+
+    public List<GetItemDTO> getAllByBox(Box box) {
+        return itemRepository.findAllByBox(box).stream().map(GetItemDTO::new).toList();
     }
 
     public GetItemDTO createItem(ItemDTO itemDTO) {

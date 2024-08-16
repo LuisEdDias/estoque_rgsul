@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://thymeleaf.org"
+      layout:decorate="~{template.html}"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Itens na Caixa</title>
+</head>
+<body>
+    <div layout:fragment="conteudo">
+        <div class="row align-items-center justify-content-center">
+            <div class="list-group align-middle mb-0 bg-white" th:hidden="${items == null || items.isEmpty()}">
+                <div class="row d-flex justify-content-lg-start border-bottom border-black">
+                    <div class="col-8 col-lg-6"><h3>Nome</h3></div>
+                    <div class="col-4 col-lg-3 text-center"><h3>Número</h3></div>
+                </div>
+
+                <div class="row justify-content-center border-bottom border-black" th:each="item : ${items}">
+                    <div class="col-8 col-lg-6 d-flex align-items-center text-truncate">
+                        <p class="fw-bold m-0" th:text="${item.name()}"></p>
+                    </div>
+
+                    <div class="col-4 col-lg-3 d-flex align-items-center justify-content-center">
+                        <p class="fw-normal m-0" th:text="${item.id()}"></p>
+                    </div>
+
+                    <div class="col-6 col-lg-3 d-flex align-items-center justify-content-center">
+                        <button type="button" class="btn btn-outline-primary w-75 my-1">
+                            <a th:href="@{'item/' + ${item.id()}}">Ver</a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="flex-column" th:hidden="${!items.isEmpty()}">
+                    <h3 class="row fs-5 py-4 justify-content-center" >Caixa Vazia!</h3>
+                    <div class="row justify-content-center">
+                        <button type="button" class="btn btn-success btn-lg col-8 col-md-6 col-sm-3">
+                            <a href="item/adicionar" class="text-white">Cadastrar Item</a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

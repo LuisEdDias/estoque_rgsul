@@ -6,11 +6,12 @@ import br.net.rgsul.estoque.dto.MovementsDTO;
 import br.net.rgsul.estoque.dto.UpdateItemDTO;
 import br.net.rgsul.estoque.services.ItemService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("item")
 public class ItemController {
     private final ItemService itemService;
@@ -22,6 +23,11 @@ public class ItemController {
     @GetMapping("{id}")
     public ResponseEntity<GetItemDTO> getItem(@PathVariable int id) {
         return ResponseEntity.ok(itemService.getItem(id));
+    }
+
+    @GetMapping("adicionar")
+    public String adicionarItem() {
+        return "views/item/new-item";
     }
 
     @GetMapping

@@ -1,6 +1,8 @@
 package br.net.rgsul.estoque.services;
 
 import br.net.rgsul.estoque.dto.BoxDTO;
+import br.net.rgsul.estoque.dto.GetBoxDTO;
+import br.net.rgsul.estoque.dto.GetItemDTO;
 import br.net.rgsul.estoque.entities.Box;
 import br.net.rgsul.estoque.repositories.BoxRepository;
 import org.springframework.stereotype.Service;
@@ -13,38 +15,41 @@ import java.util.Optional;
 public class BoxService {
     private final BoxRepository boxRepository;
 
-    public BoxService(BoxRepository boxRepository) {
+    private final ItemService itemService;
+
+    public BoxService(BoxRepository boxRepository, ItemService itemService) {
         this.boxRepository = boxRepository;
+        this.itemService = itemService;
     }
 
-    public BoxDTO findById(int id) {
-        Optional<Box> box = boxRepository.findById(id);
-        if (box.isPresent()) {
-            return new BoxDTO(box.get());
-        }
-        throw new NoSuchElementException();
+    public List<GetBoxDTO> findAll() {
+        return boxRepository.findAll().stream().map(GetBoxDTO::new).toList();
     }
 
-    public List<BoxDTO> findAll() {
-        return boxRepository.findAll().stream().map(BoxDTO::new).toList();
-    }
-
-    public BoxDTO save(BoxDTO boxDTO) {
+    public GetBoxDTO save(BoxDTO boxDTO) {
         Box box = new Box(boxDTO);
-        return new BoxDTO(boxRepository.save(box));
+        return new GetBoxDTO(boxRepository.save(box));
     }
 
-    public BoxDTO update(int id, BoxDTO boxDTO) {
+    public GetBoxDTO update(int id, BoxDTO boxDTO) {
         Optional<Box> box = boxRepository.findById(id);
         if (box.isPresent()) {
             Box boxAux = box.get();
             boxAux.update(boxDTO);
-            return new BoxDTO(boxRepository.save(boxAux));
+            return new GetBoxDTO(boxRepository.save(boxAux));
         }
         throw new NoSuchElementException();
     }
 
     public void delete(int id) {
         boxRepository.deleteById(id);
+    }
+
+    public List<GetItemDTO> findAllItems(int id) {
+        Optional<Box> box = boxRepository.findById(id);
+        if (box.isPresent()) {
+            return itemService.getAllByBox(box.get());
+        }
+        throw new NoSuchElementException("Box not found");
     }
 }

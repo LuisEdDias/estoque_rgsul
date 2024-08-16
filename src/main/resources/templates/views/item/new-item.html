@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{template.html}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Caixa</title>
+</head>
+<body>
+    <div layout:fragment="conteudo">
+        <form class="container" method="post" action="">
+            <div class="row justify-content-center">
+                <div class="col-lg-9 pb-4">
+                    <div data-mdb-input-init class="form-outline">
+                        <input name="name" type="text" id="name"
+                               class="form-control text-black-75 fs-4" required/>
+                        <label class="form-label" for="name">Nome</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-9 pb-4">
+                    <div data-mdb-input-init class="form-outline">
+                        <input name="id" type="text" id="id" class="form-control text-black-75 fs-4"
+                               pattern="^\d$" maxlength="5" required/>
+                        <label class="form-label" for="id">Número</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="d-lg-flex col-lg-9 justify-content-lg-between">
+                    <div class="col-lg-5 pb-4">
+                        <div data-mdb-input-init class="form-outline">
+                            <input name="description" type="text" class="form-control fs-4" id="description"/>
+                            <label for="description" class="form-label">Descrição</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="d-flex col-lg-8 column-gap-1 justify-content-around">
+                    <button type="submit" class="btn btn-success col-6 col-sm-3 col-md-4">
+                        Cadastrar
+                    </button>
+
+                    <button type="button" class="btn btn-danger col-6 col-sm-3 col-md-4">
+                        <a href="" class="text-white">Cancelar</a>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

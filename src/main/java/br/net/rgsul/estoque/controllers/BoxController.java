@@ -1,13 +1,14 @@
 package br.net.rgsul.estoque.controllers;
 
 import br.net.rgsul.estoque.dto.BoxDTO;
+import br.net.rgsul.estoque.dto.GetBoxDTO;
 import br.net.rgsul.estoque.services.BoxService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequestMapping("box")
 public class BoxController {
     private final BoxService boxService;
@@ -17,22 +18,30 @@ public class BoxController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BoxDTO>> getAll(){
-        return ResponseEntity.ok(boxService.findAll());
+    public String index(Model model) {
+        model.addAttribute("boxes", boxService.findAll());
+        return "views/box/index";
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<BoxDTO> getById(@PathVariable Integer id){
-        return ResponseEntity.ok(boxService.findById(id));
+    public String getById(@PathVariable Integer id, Model model){
+        model.addAttribute("box", boxService.findAllItems(id));
+        return "views/box/box";
+    }
+
+    @GetMapping("new-box")
+    public String newBox(Model model){
+        return "views/box/new-box";
     }
 
     @PostMapping
-    public ResponseEntity<BoxDTO> create(@RequestBody BoxDTO boxDTO){
-        return ResponseEntity.ok(boxService.save(boxDTO));
+    public String create(BoxDTO boxDTO){
+        boxService.save(boxDTO);
+        return "redirect:/box";
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<BoxDTO> update(@PathVariable Integer id, @RequestBody BoxDTO boxDTO){
+    public ResponseEntity<GetBoxDTO> update(@PathVariable Integer id, @RequestBody BoxDTO boxDTO){
         return ResponseEntity.ok(boxService.update(id, boxDTO));
     }
 
