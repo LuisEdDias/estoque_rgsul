@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 @Table(name = "boxes")
 public class Box {
     @Id
+    @Column(nullable = false, unique = true)
     private int id;
 
     private String name;

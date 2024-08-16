@@ -17,29 +17,29 @@ public class BoxService {
         this.boxRepository = boxRepository;
     }
 
-    public Box findById(int id) {
+    public BoxDTO findById(int id) {
         Optional<Box> box = boxRepository.findById(id);
         if (box.isPresent()) {
-            return box.get();
+            return new BoxDTO(box.get());
         }
         throw new NoSuchElementException();
     }
 
-    public List<Box> findAll() {
-        return boxRepository.findAll();
+    public List<BoxDTO> findAll() {
+        return boxRepository.findAll().stream().map(BoxDTO::new).toList();
     }
 
-    public Box save(BoxDTO boxDTO) {
+    public BoxDTO save(BoxDTO boxDTO) {
         Box box = new Box(boxDTO);
-        return boxRepository.save(box);
+        return new BoxDTO(boxRepository.save(box));
     }
 
-    public Box update(BoxDTO boxDTO) {
-        Optional<Box> box = boxRepository.findById(boxDTO.id());
+    public BoxDTO update(int id, BoxDTO boxDTO) {
+        Optional<Box> box = boxRepository.findById(id);
         if (box.isPresent()) {
             Box boxAux = box.get();
             boxAux.update(boxDTO);
-            return boxRepository.save(boxAux);
+            return new BoxDTO(boxRepository.save(boxAux));
         }
         throw new NoSuchElementException();
     }
