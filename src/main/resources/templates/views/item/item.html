@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://thymeleaf.org"
       layout:decorate="~{template.html}"
 >
 
@@ -11,40 +10,105 @@
 </head>
 <body>
     <div layout:fragment="conteudo">
-        <div class="row align-items-center justify-content-center">
-            <div class="list-group align-middle mb-0 bg-white" th:hidden="${alunos == null || alunos.isEmpty()}">
-                <div class="row d-flex justify-content-lg-start border-bottom border-black">
-                    <div class="col-8 col-lg-6"><h3>Nome</h3></div>
-                    <div class="col-4 col-lg-3 text-center"><h3>Turma</h3></div>
+        <div class="row justify-content-between mb-0 bg-white">
+                <div class="col-6 card rounded-3 border border-black p-2">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">ID</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${item.id()}"></p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Item</p>
+                        </div>
+
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${item.name()}"></p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Status</p>
+                        </div>
+
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${item.status()}"></p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Localização</p>
+                        </div>
+
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${item.saved()}"></p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Última Atualização</p>
+                        </div>
+
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${item.updated()}"></p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Caixa</p>
+                        </div>
+
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0" th:text="${item.boxId()}"></p>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="row justify-content-center border-bottom border-black" th:each="aluno : ${alunos}">
-                    <div class="col-8 col-lg-6 d-flex align-items-center text-truncate">
-                        <p class="fw-bold m-0" th:text="${aluno.nome()}"></p>
-                    </div>
-
-                    <div class="col-4 col-lg-3 d-flex align-items-center justify-content-center">
-                        <p class="fw-normal m-0" th:text="${aluno.turma()}"></p>
-                    </div>
-
-                    <div class="col-6 col-lg-3 d-flex align-items-center justify-content-center">
-                        <button type="button" class="btn btn-outline-primary w-75 my-1">
-                            <a th:href="@{'/aluno/' + ${aluno.matricula()}}">Ver</a>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="flex-column" th:hidden="${!alunos.isEmpty()}">
-                    <h3 class="row fs-5 py-4 justify-content-center" >Não existem alunos cadastrados!</h3>
-                    <div class="row justify-content-center">
-                        <button type="button" class="btn btn-success btn-lg col-8 col-md-6 col-sm-3">
-                            <a href="/cadastro" class="text-white">Cadastrar</a>
-                        </button>
-                    </div>
+                <div class="col-6">
+                    <table class="table table-hover table-sm text-center">
+                        <thead>
+                        <tr class="table-secondary">
+                            <th scope="col" class="col-auto">
+                                Comentário
+                            </th>
+                            <th scope="col" class="col-2">
+                                Status
+                            </th>
+                            <th scope="col" class="col-1">
+                                Caixa
+                            </th>
+                            <th scope="col" class="col-2">
+                                Data
+                            </th>
+                        </thead>
+                        <tbody th:each="movement : ${movements}">
+                        <tr>
+                            <td th:text="${movement.description()}"></td>
+                            <td th:text="${movement.status()}"></td>
+                            <td th:text="${movement.box()}"></td>
+                            <td th:text="${movement.date()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </div>
 </body>
 </html>

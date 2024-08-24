@@ -33,6 +33,10 @@ public class ItemService {
         throw new NoSuchElementException("Item not found");
     }
 
+    public List<GetMovementDTO> getItemMovements(int itemId) {
+        return movementRepository.findAllByItemId(itemId).stream().map(GetMovementDTO::new).toList();
+    }
+
     public List<GetItemDTO> getAll() {
         List<Item> items = itemRepository.findAll();
         return items.stream().map(GetItemDTO::new).toList();
@@ -52,6 +56,8 @@ public class ItemService {
         }
 
         Item item = new Item(itemDTO, box);
+        Movement movement = new Movement(item);
+        movementRepository.save(movement);
         return new GetItemDTO(itemRepository.save(item));
     }
 
@@ -66,6 +72,8 @@ public class ItemService {
                 box = null;
             }
             itemAux.update(updateItemDTO, box);
+            Movement movement = new Movement(itemAux);
+            movementRepository.save(movement);
             return new GetItemDTO(itemRepository.save(itemAux));
         }
         throw new NoSuchElementException("Item not found");
@@ -78,21 +86,6 @@ public class ItemService {
             Optional<Box> box = boxRepository.findById(itemAux.getBoxId());
             box.ifPresent(Box::setUpdated);
             itemRepository.delete(itemAux);
-        }
-        throw new NoSuchElementException("Item not found");
-    }
-
-    public MovementsDTO getMovements(int id){
-        Optional<Item> item = itemRepository.findById(id);
-        if (item.isPresent()) {
-            Item itemAux = item.get();
-            List<Movement> movements = movementRepository.findAll();
-
-            return new MovementsDTO(
-                    itemAux.getId(),
-                    itemAux.getName(),
-                    movements.stream().map(GetMovementDTO::new).toList()
-            );
         }
         throw new NoSuchElementException("Item not found");
     }

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://thymeleaf.org"
       layout:decorate="~{template.html}"
 >
 
@@ -12,39 +11,245 @@
 <body>
     <div layout:fragment="conteudo">
         <div class="row align-items-center justify-content-center">
-            <div class="list-group align-middle mb-0 bg-white" th:hidden="${items == null || items.isEmpty()}">
-                <div class="row d-flex justify-content-lg-start border-bottom border-black">
-                    <div class="col-8 col-lg-6"><h3>Nome</h3></div>
-                    <div class="col-4 col-lg-3 text-center"><h3>Número</h3></div>
-                </div>
+            <div class="align-middle mb-0 bg-white" th:hidden="${items == null || items.isEmpty()}">
+                <table class="table table-hover table-sm text-center">
+                    <thead class="sticky-top">
+                        <tr>
+                            <th colspan="100%">
+                                <div class="row justify-content-between px-2">
+                                    <button type="button" class="btn btn-danger btn-lg col-3" data-bs-toggle="modal" data-bs-target="#delete-box-modal">
+                                        Remover Caixa
+                                    </button>
 
-                <div class="row justify-content-center border-bottom border-black" th:each="item : ${items}">
-                    <div class="col-8 col-lg-6 d-flex align-items-center text-truncate">
-                        <p class="fw-bold m-0" th:text="${item.name()}"></p>
-                    </div>
+                                    <button type="button" class="btn btn-success btn-lg col-3" data-bs-toggle="modal" data-bs-target="#new-item-modal">
+                                        Adicionar Item
+                                    </button>
 
-                    <div class="col-4 col-lg-3 d-flex align-items-center justify-content-center">
-                        <p class="fw-normal m-0" th:text="${item.id()}"></p>
-                    </div>
+                                    <button type="button" class="btn btn-primary btn-lg col-3">Mover Selecionados</button>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr class="table-secondary">
+                            <th scope="col">
+                                <div class="form-check">
+                                    <label class="visually-hidden" for="select-all">Select</label>
+                                    <input class="form-check-input" type="checkbox" id="select-all"/>
+                                </div>
+                            </th>
+                            <th scope="col" class="col-2">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" class="form-control bg-white" id="id" placeholder="ID">
+                                    <label class="form-label" for="id">ID</label>
+                                </div>
+                            </th>
+                            <th scope="col" class="col-auto">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" class="form-control bg-white" id="item" placeholder="Item">
+                                    <label class="form-label" for="item">Item</label>
+                                </div>
+                            </th>
+                            <th scope="col" class="col-2 align-items-center">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" class="form-control bg-white" id="search-updated" placeholder="dd/mm/aaaa" maxlength="10">
+                                    <label class="form-label" for="search-updated">Atualizado</label>
+                                </div>
+                            </th>
+                            <th scope="col" class="col-2">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <label class="visually-hidden" for="status"></label>
+                                    <select class="form-select" id="status" data-mdb-select-init>
+                                        <option selected>Status</option>
 
-                    <div class="col-6 col-lg-3 d-flex align-items-center justify-content-center">
-                        <button type="button" class="btn btn-outline-primary w-75 my-1">
-                            <a th:href="@{'item/' + ${item.id()}}">Ver</a>
-                        </button>
-                    </div>
+                                        <option th:each="stt : ${status}"
+                                                th:value="${stt}"
+                                                th:text="${stt.nameStr}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </th>
+                            <th scope="col">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody th:each="item : ${items}">
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <label>
+                                        <input class="form-check-input item-checkbox" type="checkbox" th:value="${item.id()}" th:id="${item.id()}"/>
+                                    </label>
+                                </div>
+                            </td>
+                            <td th:text="${item.id()}"></td>
+                            <td th:text="${item.name()}"></td>
+                            <td th:text="${item.updated()}"></td>
+                            <td th:text="${item.status()}"></td>
+                            <td><button type="submit">Mover</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="container" th:hidden="${!items.isEmpty()}">
+                <h3 class="row fs-5 py-4 justify-content-center" >Caixa Vazia!</h3>
+                <div class="row justify-content-center">
+                    <button type="button" class="btn btn-success btn-lg col-8 col-md-6 col-sm-3" data-bs-toggle="modal" data-bs-target="#new-item-modal">
+                        Adicionar Item
+                    </button>
                 </div>
             </div>
-            <div class="container">
-                <div class="flex-column" th:hidden="${!items.isEmpty()}">
-                    <h3 class="row fs-5 py-4 justify-content-center" >Caixa Vazia!</h3>
-                    <div class="row justify-content-center">
-                        <button type="button" class="btn btn-success btn-lg col-8 col-md-6 col-sm-3">
-                            <a href="item/adicionar" class="text-white">Cadastrar Item</a>
-                        </button>
+        </div>
+
+        <!--New Item Modal-->
+        <div class="modal fade" id="new-item-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Item na Caixa</h1>
+                        <button type="button" class="btn-close" id="close-new-item-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="container" id="new-item-form">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-9 pb-4">
+                                    <div data-mdb-input-init class="form-outline">
+                                        <input name="name" type="text" id="name"
+                                               class="form-control text-black-75 fs-4" required/>
+                                        <label class="form-label" for="name">Nome</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-9 pb-4">
+                                    <div data-mdb-input-init class="form-outline">
+                                        <input name="id" type="text" id="id-modal" class="form-control text-black-75 fs-4"
+                                               pattern="^\d+$" maxlength="7" required/>
+                                        <label class="form-label" for="id-modal">ID</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="d-lg-flex col-lg-9 justify-content-lg-between">
+                                    <div data-mdb-input-init class="form-outline">
+                                        <textarea name="comment" class="form-control fs-4" id="comment" rows="1"></textarea>
+                                        <label for="comment" class="form-label">Comentário</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="d-lg-flex col-lg-9 justify-content-lg-between">
+                                    <div class="col-lg-5 pb-4">
+                                        <label class="form-label fs-4 me-1" for="selectStatus">Status</label>
+
+                                        <select class="custom-select h-100" name="status" id="selectStatus">
+                                            <option disabled selected>Selecionar</option>
+
+                                            <option th:each="stt : ${status}"
+                                                    th:value="${stt}"
+                                                    th:text="${stt.nameStr}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-5 pb-4" hidden="hidden">
+                                        <input name="boxId" type="text" class="form-control fs-4" id="boxId" th:value="${box.id()}"/>
+                                        <label class="form-label fs-4 me-1" for="boxId">Status</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="close-new-item-modal2" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary" id="post-new-item">Adicionar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Delete Box Modal -->
+        <div class="modal fade" id="delete-box-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Deletar Caixa</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <p class="fs-2">Tem certeza que deseja deletar a caixa <i th:text="${box.id()}" class="fw-bold"></i></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" id="delete-box"><a>Deletar</a></button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Seleciona o checkbox no header
+            const selectAllCheckbox = document.getElementById('select-all');
+
+            // Seleciona todos os checkboxes das linhas da tabela
+            const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+
+            // Adiciona o evento de clique ao checkbox do header
+            selectAllCheckbox.addEventListener('click', function() {
+                itemCheckboxes.forEach(function(checkbox) {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+            });
+        </script>
+
+        <script>
+            const newItemModalClose = document.getElementById('close-new-item-modal');
+            const newItemModalClose2 = document.getElementById('close-new-item-modal2');
+            const postNewItemForm = document.getElementById('new-item-form');
+
+            newItemModalClose.addEventListener('click', function () {
+                window.location.reload();
+            });
+
+            newItemModalClose2.addEventListener('click', function () {
+                window.location.reload();
+            });
+
+            postNewItemForm.addEventListener('submit', async function (ev){
+                ev.preventDefault();
+                const id = document.getElementById('id-modal');
+                const name = document.getElementById('name').value;
+                const comment = document.getElementById('comment').value;
+                const status = document.getElementById('selectStatus');
+                const boxId = document.getElementById('boxId').value;
+                const response = await postItem(id.value, name, comment, status.options[status.selectedIndex].value, boxId);
+
+                if (!response.ok){
+                    alert("Item já cadastrado em outra caixa!")
+                } else {
+                    id.value = "";
+                }
+            })
+
+            async function postItem(id, name, comment, status, boxId) {
+                return await fetch("./../../item", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            id: id,
+                            name: name,
+                            comment: comment,
+                            status: status,
+                            boxId: boxId
+                        })
+                    }
+                )
+            }
+        </script>
     </div>
 </body>
 </html>

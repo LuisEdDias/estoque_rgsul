@@ -4,12 +4,13 @@ import br.net.rgsul.estoque.entities.Movement;
 
 import java.time.format.DateTimeFormatter;
 
-public record GetMovementDTO(Long id, String description, String date) {
+public record GetMovementDTO(String description,String status, int box, String date) {
     public GetMovementDTO(Movement movement) {
         this(
-                movement.getId(),
                 movement.getDescription(),
-                movement.getDate().toLocalDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                movement.getStatus().nameStr,
+                movement.getBox(),
+                movement.getDate().toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
         );
     }
 }

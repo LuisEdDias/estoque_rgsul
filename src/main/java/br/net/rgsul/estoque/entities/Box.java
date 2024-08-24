@@ -17,6 +17,7 @@ public class Box {
     private String description;
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updated;
+    private BoxStatus status;
 
     public Box() {}
 
@@ -25,12 +26,14 @@ public class Box {
         this.name = boxDTO.name();
         this.description = boxDTO.description();
         this.updated = new Timestamp(System.currentTimeMillis());
+        this.status = boxDTO.status();
     }
 
     public void update(BoxDTO boxDTO) {
         this.name = boxDTO.name();
         this.description = boxDTO.description();
         this.updated = new Timestamp(System.currentTimeMillis());
+        this.status = boxDTO.status();
     }
 
     public void setUpdated(){
@@ -53,12 +56,7 @@ public class Box {
         return updated;
     }
 
-    @Override
-    public String toString() {
-        return
-                "ID: " + id +
-                ", Name: " + name +
-                ", Description: " + description +
-                ", Updated: " + updated.toLocalDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    public BoxStatus getStatus() {
+        return status;
     }
 }

@@ -26,6 +26,14 @@ public class BoxService {
         return boxRepository.findAll().stream().map(GetBoxDTO::new).toList();
     }
 
+    public GetBoxDTO getBoxById(int id) {
+        Optional<Box> box = boxRepository.findById(id);
+        if (box.isPresent()) {
+            return new GetBoxDTO(box.get());
+        }
+        throw new NoSuchElementException();
+    }
+
     public GetBoxDTO save(BoxDTO boxDTO) {
         Box box = new Box(boxDTO);
         return new GetBoxDTO(boxRepository.save(box));

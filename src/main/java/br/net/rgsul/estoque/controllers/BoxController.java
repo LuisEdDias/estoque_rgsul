@@ -2,6 +2,7 @@ package br.net.rgsul.estoque.controllers;
 
 import br.net.rgsul.estoque.dto.BoxDTO;
 import br.net.rgsul.estoque.dto.GetBoxDTO;
+import br.net.rgsul.estoque.entities.ItemStatus;
 import br.net.rgsul.estoque.services.BoxService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,9 @@ public class BoxController {
 
     @GetMapping("{id}")
     public String getById(@PathVariable Integer id, Model model){
-        model.addAttribute("box", boxService.findAllItems(id));
+        model.addAttribute("items", boxService.findAllItems(id));
+        model.addAttribute("box", boxService.getBoxById(id));
+        model.addAttribute("status", ItemStatus.values());
         return "views/box/box";
     }
 
@@ -46,8 +49,8 @@ public class BoxController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id){
+    public String delete(@PathVariable Integer id){
         boxService.delete(id);
-        return ResponseEntity.ok("Caixa " + id + " com sucesso!");
+        return "redirect:/box";
     }
 }

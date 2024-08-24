@@ -2,14 +2,13 @@ package br.net.rgsul.estoque.controllers;
 
 import br.net.rgsul.estoque.dto.GetItemDTO;
 import br.net.rgsul.estoque.dto.ItemDTO;
-import br.net.rgsul.estoque.dto.MovementsDTO;
 import br.net.rgsul.estoque.dto.UpdateItemDTO;
+import br.net.rgsul.estoque.entities.ItemStatus;
 import br.net.rgsul.estoque.services.ItemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("item")
@@ -21,18 +20,17 @@ public class ItemController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<GetItemDTO> getItem(@PathVariable int id) {
-        return ResponseEntity.ok(itemService.getItem(id));
-    }
-
-    @GetMapping("adicionar")
-    public String adicionarItem() {
-        return "views/item/new-item";
+    public String getItem(@PathVariable int id, Model model) {
+        model.addAttribute("item", itemService.getItem(id));
+        model.addAttribute("movements", itemService.getItemMovements(id));
+        return "views/item/item";
     }
 
     @GetMapping
-    public ResponseEntity<List<GetItemDTO>> getAll() {
-        return ResponseEntity.ok(itemService.getAll());
+    public String getAll(Model model) {
+        model.addAttribute("items", itemService.getAll());
+        model.addAttribute("status", ItemStatus.values());
+        return "views/item/list";
     }
 
     @PostMapping
@@ -49,10 +47,5 @@ public class ItemController {
     public ResponseEntity<String> deleteItem(@PathVariable int id) {
         itemService.deleteItem(id);
         return ResponseEntity.ok("Item deleted");
-    }
-
-    @GetMapping("movements/{id}")
-    public ResponseEntity<MovementsDTO> getMovements(@PathVariable int id) {
-        return ResponseEntity.ok(itemService.getMovements(id));
     }
 }

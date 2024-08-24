@@ -17,7 +17,7 @@ public class Item {
 
     private String name;
     private String comment;
-    private Status status;
+    private ItemStatus itemStatus;
     private boolean saved;
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updated;
@@ -32,23 +32,21 @@ public class Item {
         this.id = itemDTO.id();
         this.name = itemDTO.name();
         this.comment = itemDTO.comment();
-        this.status = itemDTO.status();
+        this.itemStatus = itemDTO.itemStatus();
         this.saved = true;
         this.updated = new Timestamp(System.currentTimeMillis());
         this.box = box;
         box.setUpdated();
-        new Movement(this);
     }
 
     public void update(UpdateItemDTO itemDTO, Box box) {
         this.name = itemDTO.name();
         this.comment = itemDTO.comment();
-        this.status = itemDTO.status();
+        this.itemStatus = itemDTO.itemStatus();
         this.saved = Boolean.parseBoolean(itemDTO.saved());
         this.updated = new Timestamp(System.currentTimeMillis());
         this.box = box;
         box.setUpdated();
-        new Movement(this);
     }
 
     public int getId() {
@@ -59,8 +57,8 @@ public class Item {
         return name;
     }
 
-    public Status getStatus() {
-        return status;
+    public ItemStatus getStatus() {
+        return itemStatus;
     }
 
     public String getComment() {
@@ -84,7 +82,7 @@ public class Item {
         return "ID: " + id +
                 ", Name: " + name +
                 ", Comment: " + comment +
-                ", Status: " + status +
+                ", Status: " + itemStatus +
                 ", Inside Box: " + saved +
                 ", Updated: " + updated.toLocalDateTime();
     }

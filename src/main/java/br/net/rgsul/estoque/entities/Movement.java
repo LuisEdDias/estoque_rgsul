@@ -11,7 +11,9 @@ public class Movement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(nullable = true)
+    private int box;
+    private ItemStatus status;
     private String description;
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp date;
@@ -22,6 +24,8 @@ public class Movement {
     public Movement(){}
 
     public Movement(Item item) {
+        this.box = item.getBoxId();
+        this.status = item.getStatus();
         this.item = item;
         this.description = item.getComment() == null? "Adicionado à caixa" : item.getComment();
         this.date = new Timestamp(System.currentTimeMillis());
@@ -41,5 +45,13 @@ public class Movement {
 
     public Item getItem() {
         return item;
+    }
+
+    public int getBox() {
+        return box;
+    }
+
+    public ItemStatus getStatus() {
+        return status;
     }
 }

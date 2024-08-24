@@ -10,9 +10,9 @@ public record GetItemDTO(int id, String name, String comment, String status, Str
                 item.getId(),
                 item.getName(),
                 item.getComment(),
-                item.getStatus().name(),
+                item.getStatus().nameStr,
                 item.isSaved()? "NA CAIXA" : "NA RUA",
-                item.getUpdated().toLocalDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                item.getUpdated().toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
                 item.getBoxId()
         );
     }
