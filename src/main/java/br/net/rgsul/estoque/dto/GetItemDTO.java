@@ -13,7 +13,7 @@ public record GetItemDTO(int id, String name, String comment, String status, Str
                 item.getStatus().nameStr,
                 item.isSaved()? "NA CAIXA" : "NA RUA",
                 item.getUpdated().toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
-                item.getBoxId()
+                item.getBox() == null? 0 : item.getBox().getId()
         );
     }
 }

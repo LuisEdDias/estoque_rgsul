@@ -2,6 +2,7 @@ package br.net.rgsul.estoque.controllers;
 
 import br.net.rgsul.estoque.dto.GetItemDTO;
 import br.net.rgsul.estoque.dto.ItemDTO;
+import br.net.rgsul.estoque.dto.MovementDTO;
 import br.net.rgsul.estoque.dto.UpdateItemDTO;
 import br.net.rgsul.estoque.entities.ItemStatus;
 import br.net.rgsul.estoque.services.ItemService;
@@ -43,9 +44,8 @@ public class ItemController {
         return ResponseEntity.ok(itemService.updateItem(id, updateItemDTO));
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteItem(@PathVariable int id) {
-        itemService.deleteItem(id);
-        return ResponseEntity.ok("Item deleted");
+    @PutMapping("{id}/mov")
+    public ResponseEntity<GetItemDTO> movItem(@PathVariable int id, @RequestBody MovementDTO movementDTO) {
+        return ResponseEntity.ok(itemService.movItem(id, movementDTO));
     }
 }

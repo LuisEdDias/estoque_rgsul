@@ -47,46 +47,66 @@ public class ItemService {
     }
 
     public GetItemDTO createItem(ItemDTO itemDTO) {
-        Box box;
+        Box box = boxRepository.findById(itemDTO.boxId()).orElseThrow(
+                () -> new NoSuchElementException("Box not found")
+        );
 
-        try {
-            box = boxRepository.getReferenceById(itemDTO.boxId());
-        } catch (RuntimeException e){
-            box = null;
+        Optional<Item> item = itemRepository.findById(itemDTO.id());
+        Item itemAux;
+
+        if (item.filter(value -> value.getBox() != null).isPresent()) {
+            throw new IllegalArgumentException("Item already exists");
+        } else if (item.isPresent()) {
+            itemAux = item.get().update(itemDTO, box);
+        } else {
+            itemAux = new Item(itemDTO, box);
         }
 
-        Item item = new Item(itemDTO, box);
+        itemRepository.save(itemAux);
+        box.setUpdated();
+        boxRepository.save(box);
+        Movement movement = new Movement(itemAux);
+        movementRepository.save(movement);
+        return new GetItemDTO(itemAux);
+    }
+
+    public GetItemDTO updateItem(int id, UpdateItemDTO itemDTO) {
+        Item item = itemRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Item not found"));
+        item.update(itemDTO);
         Movement movement = new Movement(item);
         movementRepository.save(movement);
         return new GetItemDTO(itemRepository.save(item));
     }
 
-    public GetItemDTO updateItem(int id, UpdateItemDTO updateItemDTO) {
-        Box box;
-        Optional<Item> item = itemRepository.findById(id);
-        if (item.isPresent()) {
-            Item itemAux = item.get();
-            try {
-                box = boxRepository.getReferenceById(updateItemDTO.boxId());
-            } catch (RuntimeException e){
-                box = null;
-            }
-            itemAux.update(updateItemDTO, box);
-            Movement movement = new Movement(itemAux);
-            movementRepository.save(movement);
-            return new GetItemDTO(itemRepository.save(itemAux));
-        }
-        throw new NoSuchElementException("Item not found");
-    }
+    public GetItemDTO movItem(int id, MovementDTO movementDTO) {
+        System.out.println(id + " " + movementDTO.boxId() + " " + movementDTO.comment() + " " + movementDTO.status());
+        Item item = itemRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("Item not found")
+        );
+        Box oldBox = item.getBox();
+        Box newBox = null;
 
-    public void deleteItem(int id) {
-        Optional<Item> item = itemRepository.findById(id);
-        if (item.isPresent()) {
-            Item itemAux = item.get();
-            Optional<Box> box = boxRepository.findById(itemAux.getBoxId());
-            box.ifPresent(Box::setUpdated);
-            itemRepository.delete(itemAux);
+        if (movementDTO.boxId() != 0){
+            newBox = boxRepository.findById(movementDTO.boxId()).orElseThrow(
+                    () -> new NoSuchElementException("Box not found")
+            );
         }
-        throw new NoSuchElementException("Item not found");
+
+        item.move(movementDTO, newBox);
+        itemRepository.save(item);
+        Movement movement = new Movement(item);
+        movementRepository.save(movement);
+
+        if (oldBox != null){
+            oldBox.setUpdated();
+            boxRepository.save(oldBox);
+        }
+
+        if (newBox != null){
+            newBox.setUpdated();
+            boxRepository.save(newBox);
+        }
+
+        return new GetItemDTO(item);
     }
 }

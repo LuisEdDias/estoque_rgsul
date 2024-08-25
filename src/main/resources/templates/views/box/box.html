@@ -32,8 +32,9 @@
                         <tr class="table-secondary">
                             <th scope="col">
                                 <div class="form-check">
-                                    <label class="visually-hidden" for="select-all">Select</label>
-                                    <input class="form-check-input" type="checkbox" id="select-all"/>
+                                    <label>
+                                        <input class="form-check-input" type="checkbox" id="select-all"/>
+                                    </label>
                                 </div>
                             </th>
                             <th scope="col" class="col-2">
@@ -60,7 +61,7 @@
                                     <select class="form-select" id="status" data-mdb-select-init>
                                         <option selected>Status</option>
 
-                                        <option th:each="stt : ${status}"
+                                        <option th:each="stt : ${itemStatus}"
                                                 th:value="${stt}"
                                                 th:text="${stt.nameStr}">
                                         </option>
@@ -84,7 +85,9 @@
                             <td th:text="${item.name()}"></td>
                             <td th:text="${item.updated()}"></td>
                             <td th:text="${item.status()}"></td>
-                            <td><button type="submit">Mover</button></td>
+                            <td>
+                                <button type="button"><a th:href="@{'./../item/' + ${item.id()}}">Mover</a></button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -119,42 +122,36 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-9 pb-4">
-                                    <div data-mdb-input-init class="form-outline">
-                                        <input name="id" type="text" id="id-modal" class="form-control text-black-75 fs-4"
-                                               pattern="^\d+$" maxlength="7" required/>
-                                        <label class="form-label" for="id-modal">ID</label>
+                                <div class="col-lg-9 pb-4 d-flex justify-content-between">
+                                    <div class="5">
+                                        <div data-mdb-input-init class="form-outline">
+                                            <input name="id" type="text" id="id-modal" class="form-control text-black-75 fs-4"
+                                                   pattern="^\d+$" maxlength="7" required/>
+                                            <label class="form-label" for="id-modal">ID</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label for="selectStatus" class="visually-hidden">Status</label>
+                                        <select class="custom-select h-100" name="status" id="selectStatus">
+                                            <option disabled selected>Status</option>
+
+                                            <option th:each="stt : ${itemStatus}"
+                                                    th:value="${stt}"
+                                                    th:text="${stt.nameStr}">
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="row justify-content-center">
                                 <div class="d-lg-flex col-lg-9 justify-content-lg-between">
                                     <div data-mdb-input-init class="form-outline">
                                         <textarea name="comment" class="form-control fs-4" id="comment" rows="1"></textarea>
                                         <label for="comment" class="form-label">Comentário</label>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="row justify-content-center">
-                                <div class="d-lg-flex col-lg-9 justify-content-lg-between">
-                                    <div class="col-lg-5 pb-4">
-                                        <label class="form-label fs-4 me-1" for="selectStatus">Status</label>
-
-                                        <select class="custom-select h-100" name="status" id="selectStatus">
-                                            <option disabled selected>Selecionar</option>
-
-                                            <option th:each="stt : ${status}"
-                                                    th:value="${stt}"
-                                                    th:text="${stt.nameStr}">
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-5 pb-4" hidden="hidden">
-                                        <input name="boxId" type="text" class="form-control fs-4" id="boxId" th:value="${box.id()}"/>
-                                        <label class="form-label fs-4 me-1" for="boxId">Status</label>
-                                    </div>
+                                <div class="col-12" hidden="hidden">
+                                    <input name="boxId" type="text" class="form-control fs-4" id="boxId" th:value="${box.id()}"/>
+                                    <label class="form-label fs-4 me-1" for="boxId">Status</label>
                                 </div>
                             </div>
                             <div class="modal-footer">

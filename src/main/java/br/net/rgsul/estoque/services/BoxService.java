@@ -34,9 +34,9 @@ public class BoxService {
         throw new NoSuchElementException();
     }
 
-    public GetBoxDTO save(BoxDTO boxDTO) {
+    public void save(BoxDTO boxDTO) {
         Box box = new Box(boxDTO);
-        return new GetBoxDTO(boxRepository.save(box));
+        new GetBoxDTO(boxRepository.save(box));
     }
 
     public GetBoxDTO update(int id, BoxDTO boxDTO) {

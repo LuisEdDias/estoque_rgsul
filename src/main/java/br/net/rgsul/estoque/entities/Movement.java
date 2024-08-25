@@ -24,7 +24,7 @@ public class Movement {
     public Movement(){}
 
     public Movement(Item item) {
-        this.box = item.getBoxId();
+        this.box = item.getBox() == null? 0 : item.getBox().getId();
         this.status = item.getStatus();
         this.item = item;
         this.description = item.getComment() == null? "Adicionado à caixa" : item.getComment();

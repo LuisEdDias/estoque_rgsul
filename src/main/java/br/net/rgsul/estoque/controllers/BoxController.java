@@ -2,6 +2,7 @@ package br.net.rgsul.estoque.controllers;
 
 import br.net.rgsul.estoque.dto.BoxDTO;
 import br.net.rgsul.estoque.dto.GetBoxDTO;
+import br.net.rgsul.estoque.entities.BoxStatus;
 import br.net.rgsul.estoque.entities.ItemStatus;
 import br.net.rgsul.estoque.services.BoxService;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +29,13 @@ public class BoxController {
     public String getById(@PathVariable Integer id, Model model){
         model.addAttribute("items", boxService.findAllItems(id));
         model.addAttribute("box", boxService.getBoxById(id));
-        model.addAttribute("status", ItemStatus.values());
+        model.addAttribute("itemStatus", ItemStatus.values());
         return "views/box/box";
     }
 
     @GetMapping("new-box")
     public String newBox(Model model){
+        model.addAttribute("boxStatus", BoxStatus.values());
         return "views/box/new-box";
     }
 

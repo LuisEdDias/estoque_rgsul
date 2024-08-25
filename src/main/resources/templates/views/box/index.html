@@ -16,8 +16,9 @@
                     <thead class="sticky-top">
                         <tr class="table-secondary">
                             <th scope="col" class="col-auto">Nome</th>
-                            <th scope="col" class="col-2">Número</th>
+                            <th scope="col" class="col-1">Número</th>
                             <th scope="col" class="col-auto">Comentário</th>
+                            <th scope="col" class="col-2">Status</th>
                             <th scope="col" class="col-2">Atualizado</th>
                             <th></th>
                         </tr>
@@ -27,6 +28,7 @@
                             <td th:text="${box.name()}"></td>
                             <td th:text="${box.id()}"></td>
                             <td th:text="${box.description()}"></td>
+                            <td th:text="${box.status()}"></td>
                             <td th:text="${box.updated()}"></td>
                             <td>
                                 <button type="button" class="btn btn-outline-primary w-75 my-1">

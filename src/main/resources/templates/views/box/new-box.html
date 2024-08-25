@@ -18,23 +18,31 @@ layout:decorate="~{template.html}"
                         <label class="form-label" for="name">Nome</label>
                     </div>
                 </div>
-
-                <div class="col-lg-9 pb-4">
+                <div class="col-lg-9 pb-4 d-flex justify-content-between">
+                    <div class="col-5">
                     <div data-mdb-input-init class="form-outline">
                         <input name="id" type="text" id="id" class="form-control text-black-75 fs-4"
                                pattern="^\d+$" maxlength="5" required/>
                         <label class="form-label" for="id">Número</label>
                     </div>
-                </div>
-            </div>
+                    </div>
 
-            <div class="row justify-content-center">
-                <div class="d-lg-flex col-lg-9 justify-content-lg-between">
-                    <div class="col-lg-5 pb-4">
-                        <div data-mdb-input-init class="form-outline">
-                            <input name="description" type="text" class="form-control fs-4" id="description"/>
-                            <label for="description" class="form-label">Descrição</label>
-                        </div>
+                    <div class="col-5 d-flex align-items-center">
+                        <label class="form-label fs-4 me-1" for="selectStatus">Status</label>
+                        <select class="custom-select h-100" name="status" id="selectStatus" required>
+                            <option disabled selected>Selecionar</option>
+
+                            <option th:each="stt : ${boxStatus}"
+                                    th:value="${stt}"
+                                    th:text="${stt.nameStr}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-9 pb-4">
+                    <div data-mdb-input-init class="form-outline">
+                        <textarea name="description" class="form-control fs-4" id="description"></textarea>
+                        <label for="description" class="form-label">Descrição</label>
                     </div>
                 </div>
             </div>
