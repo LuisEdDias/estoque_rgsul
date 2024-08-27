@@ -30,8 +30,8 @@ public class ItemController {
     @GetMapping
     public String getAll(Model model) {
         model.addAttribute("items", itemService.getAll());
-        model.addAttribute("status", ItemStatus.values());
-        return "views/item/list";
+        model.addAttribute("itemStatus", ItemStatus.values());
+        return "views/item/index";
     }
 
     @PostMapping

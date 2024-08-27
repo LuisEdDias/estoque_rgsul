@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script th:fragment="item-list-filter">
+    const tableInput = document.getElementById('table-input');
+    const itemRow = document.getElementsByClassName('table-item-row');
+
+    tableInput.addEventListener('input', filter);
+
+    function filter() {
+        const itemIdSearch = document.getElementById('search-item-id').value;
+        const itemSearch = document.getElementById('search-item').value;
+        const updatedSearch = document.getElementById('search-updated').value;
+        const selectStatus = document.getElementById('select-status').selectedOptions.item(0).textContent;
+        const boxIdSearch = document.getElementById('search-box-id');
+
+        for (let i = 0; i < itemRow.length; i++) {
+            console.log("OOOKKK");
+            const row = itemRow.item(i);
+            const itemId = row.querySelector('.item-id').textContent;
+            const itemName = row.querySelector('.item').textContent.toLowerCase();
+            const updated = row.querySelector('.updated').textContent.substring(0, 10);
+            const status = row.querySelector('.status').textContent;
+            let boxIdResult = true;
+
+            if (boxIdSearch) {
+                const boxId = row.querySelector('.box-id').textContent;
+                boxIdResult = boxId.includes(boxIdSearch.value);
+            }
+
+            if (
+                itemId.includes(itemIdSearch) &&
+                itemName.includes(itemSearch.toLowerCase()) &&
+                updated.includes(updatedSearch) &&
+                (selectStatus === 'Status' || selectStatus === status) &&
+                boxIdResult
+            ) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        }
+    }
+
+    // Date Mask
+    const updatedSearchInput = document.getElementById('search-updated');
+
+    updatedSearchInput.addEventListener('input', () => {
+        updatedSearchInput.value = dateMask(updatedSearchInput.value);
+    });
+
+    function dateMask (value) {
+        value = value.replace(/\D/g,'');
+        value = value.replace(/(\d{2})(\d)/,"$1/$2");
+        value = value.replace(/(\d{2})(\d)/,"$1/$2");
+        return value;
+    }
+</script>
+</body>
+</html>

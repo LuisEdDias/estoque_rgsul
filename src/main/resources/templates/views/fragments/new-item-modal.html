@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="new-item-modal" class="modal fade" id="new-item-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Item na Caixa</h1>
+                <button type="button" class="btn-close" id="close-new-item-modal" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="container" id="new-item-form">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-9 pb-4">
+                            <div data-mdb-input-init class="form-outline">
+                                <input name="name" type="text" id="name"
+                                       class="form-control text-black-75 fs-4" required/>
+                                <label class="form-label" for="name">Nome</label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-9 pb-4 d-flex justify-content-between">
+                            <div class="5">
+                                <div data-mdb-input-init class="form-outline">
+                                    <input name="id" type="text" id="id-modal" class="form-control text-black-75 fs-4"
+                                           pattern="^\d+$" maxlength="7" required/>
+                                    <label class="form-label" for="id-modal">ID</label>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <label for="selectStatus" class="visually-hidden">Status</label>
+                                <select class="custom-select h-100" name="status" id="selectStatus">
+                                    <option disabled selected>Status</option>
+
+                                    <option th:each="stt : ${itemStatus}"
+                                            th:value="${stt}"
+                                            th:text="${stt.nameStr}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-lg-flex col-lg-9 justify-content-lg-between">
+                            <div data-mdb-input-init class="form-outline">
+                                <textarea name="comment" class="form-control fs-4" id="comment" rows="1"></textarea>
+                                <label for="comment" class="form-label">Comentário</label>
+                            </div>
+                        </div>
+                        <div class="col-12" hidden="hidden">
+                            <input name="boxId" type="text" class="form-control fs-4" id="boxId"
+                                   th:value="${box.id()}"/>
+                            <label class="form-label fs-4 me-1" for="boxId">Status</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="close-new-item-modal2"
+                                data-bs-dismiss="modal">Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="post-new-item">Adicionar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

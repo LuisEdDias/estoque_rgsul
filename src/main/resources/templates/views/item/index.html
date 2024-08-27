@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Itens na Caixa</title>
+    <title>Todos os Itens</title>
 </head>
 <body>
 <div layout:fragment="conteudo">
@@ -14,23 +14,6 @@
         <div class="align-middle mb-0 bg-white" th:hidden="${items == null || items.isEmpty()}">
             <table class="table table-hover table-sm text-center">
                 <thead class="sticky-top">
-                <tr>
-                    <th colspan="100%">
-                        <div class="row justify-content-between px-2">
-                            <button type="button" class="btn btn-danger btn-lg col-3" data-bs-toggle="modal"
-                                    data-bs-target="#delete-box-modal">
-                                Remover Caixa
-                            </button>
-
-                            <button type="button" class="btn btn-success btn-lg col-3" data-bs-toggle="modal"
-                                    data-bs-target="#new-item-modal">
-                                Adicionar Item
-                            </button>
-
-                            <button type="button" class="btn btn-primary btn-lg col-3">Mover Selecionados</button>
-                        </div>
-                    </th>
-                </tr>
                 <tr class="table-secondary" id="table-input">
                     <th scope="col">
                         <div class="form-check">
@@ -39,7 +22,7 @@
                             </label>
                         </div>
                     </th>
-                    <th scope="col" class="col-2">
+                    <th scope="col" class="col-1">
                         <div class="form-outline" data-mdb-input-init>
                             <input type="text" class="form-control bg-white" id="search-item-id" placeholder="ID">
                             <label class="form-label" for="search-item-id">ID</label>
@@ -71,6 +54,12 @@
                             </select>
                         </div>
                     </th>
+                    <th scope="col" class="col-1">
+                        <div class="form-outline" data-mdb-input-init>
+                            <input type="text" class="form-control bg-white" id="search-box-id" placeholder="Caixa">
+                            <label class="form-label" for="search-box-id">Caixa</label>
+                        </div>
+                    </th>
                     <th scope="col">
                     </th>
                 </tr>
@@ -87,11 +76,12 @@
                     </td>
                     <td class="item-id text-start fw-medium" th:text="${item.id()}"></td>
                     <td class="item text-start fw-medium">
-                        <a class="d-block w-100 h-100 text-reset" th:href="@{'./../item/' + ${item.id()}}"
+                        <a class="d-block w-100 h-100 text-reset" th:href="@{'item/' + ${item.id()}}"
                            th:text="${item.name()}"></a>
                     </td>
                     <td class="updated" th:text="${item.updated()}"></td>
                     <td class="status" th:text="${item.status()}"></td>
+                    <td class="box-id" th:text="${item.boxId()}"></td>
                     <td>
                         <button type="button" data-bs-toggle="modal" data-bs-target="#move-item-modal"
                                 th:attr="data-id=${item.id()},data-status=${item.status()}"
@@ -105,77 +95,18 @@
         </div>
 
         <div class="container" th:hidden="${!items.isEmpty()}">
-            <h3 class="row fs-5 py-4 justify-content-center">Caixa Vazia!</h3>
-            <div class="row justify-content-center">
-                <button type="button" class="btn btn-success btn-lg col-8 col-md-6 col-sm-3" data-bs-toggle="modal"
-                        data-bs-target="#new-item-modal">
-                    Adicionar Item
-                </button>
-            </div>
+            <h3 class="row fs-5 py-4 justify-content-center">Não existem itens cadastrados!</h3>
         </div>
+
+        <!--Move Item Modal-->
+        <div th:replace="~{views/fragments/move-item-modal}"></div>
     </div>
-
-    <!--New Item Modal-->
-    <div th:replace="~{views/fragments/new-item-modal}"></div>
-
-    <!-- Delete Box Modal -->
-    <div th:replace="~{views/fragments/delete-box-modal}"></div>
-
-    <!-- Move Item Modal -->
-    <div th:replace="~{views/fragments/move-item-modal}"></div>
-
-    <!-- Move All Selected Items Script -->
-    <script th:replace="~{views/fragments/move-all-script}"></script>
 
     <!-- Items Filter Script -->
     <script th:replace="~{views/fragments/item-list-filter}"></script>
 
-    <script>
-        const newItemModalClose = document.getElementById('close-new-item-modal');
-        const newItemModalClose2 = document.getElementById('close-new-item-modal2');
-        const postNewItemForm = document.getElementById('new-item-form');
-
-        newItemModalClose.addEventListener('click', function () {
-            window.location.reload();
-        });
-
-        newItemModalClose2.addEventListener('click', function () {
-            window.location.reload();
-        });
-
-        postNewItemForm.addEventListener('submit', async function (ev) {
-            ev.preventDefault();
-            const id = document.getElementById('id-modal');
-            const name = document.getElementById('name').value;
-            const comment = document.getElementById('comment').value;
-            const status = document.getElementById('selectStatus');
-            const boxId = document.getElementById('boxId').value;
-            const response = await postItem(id.value, name, comment, status.options[status.selectedIndex].value, boxId);
-
-            if (!response.ok) {
-                alert("Item já cadastrado em outra caixa!")
-            } else {
-                id.value = "";
-            }
-        })
-
-        async function postItem(id, name, comment, status, boxId) {
-            return await fetch("./../../item", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        id: id,
-                        name: name,
-                        comment: comment,
-                        status: status,
-                        boxId: boxId
-                    })
-                }
-            )
-        }
-    </script>
+    <!-- Move All Selected Items Script -->
+    <script th:replace="~{views/fragments/move-all-script}"></script>
 </div>
 </body>
 </html>

@@ -62,19 +62,16 @@ public class ItemService {
             itemAux = new Item(itemDTO, box);
         }
 
-        itemRepository.save(itemAux);
         box.setUpdated();
         boxRepository.save(box);
-        Movement movement = new Movement(itemAux);
-        movementRepository.save(movement);
-        return new GetItemDTO(itemAux);
+        movementRepository.save(new Movement(itemAux));
+        return new GetItemDTO(itemRepository.save(itemAux));
     }
 
     public GetItemDTO updateItem(int id, UpdateItemDTO itemDTO) {
         Item item = itemRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Item not found"));
         item.update(itemDTO);
-        Movement movement = new Movement(item);
-        movementRepository.save(movement);
+        movementRepository.save(new Movement(item));
         return new GetItemDTO(itemRepository.save(item));
     }
 
@@ -93,9 +90,7 @@ public class ItemService {
         }
 
         item.move(movementDTO, newBox);
-        itemRepository.save(item);
-        Movement movement = new Movement(item);
-        movementRepository.save(movement);
+        movementRepository.save(new Movement(item));
 
         if (oldBox != null){
             oldBox.setUpdated();
@@ -107,6 +102,6 @@ public class ItemService {
             boxRepository.save(newBox);
         }
 
-        return new GetItemDTO(item);
+        return new GetItemDTO(itemRepository.save(item));
     }
 }
