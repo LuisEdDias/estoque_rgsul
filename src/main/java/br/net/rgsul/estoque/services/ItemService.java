@@ -9,6 +9,7 @@ import br.net.rgsul.estoque.repositories.ItemRepository;
 import br.net.rgsul.estoque.repositories.MovementRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -18,11 +19,14 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final BoxRepository boxRepository;
     private final MovementRepository movementRepository;
+    private final ItemsByFileService itemsByFileService;
 
-    public ItemService(ItemRepository itemRepository, BoxRepository boxRepository, MovementRepository movementRepository) {
+    public ItemService(ItemRepository itemRepository, BoxRepository boxRepository,
+                       MovementRepository movementRepository, ItemsByFileService itemsByFileService) {
         this.itemRepository = itemRepository;
         this.boxRepository = boxRepository;
         this.movementRepository = movementRepository;
+        this.itemsByFileService = itemsByFileService;
     }
 
     public GetItemDTO getItem(int id) {
@@ -66,6 +70,24 @@ public class ItemService {
         boxRepository.save(box);
         movementRepository.save(new Movement(itemAux));
         return new GetItemDTO(itemRepository.save(itemAux));
+    }
+
+    public List<ItemDTO> createItemsByFile(ItemsFileDTO fileDTO) {
+        List<ItemDTO> itemsFail = new ArrayList<>();
+        List<ItemDTO> itemDTOList = itemsByFileService.addItemsByFile(fileDTO);
+
+        if (itemDTOList.isEmpty()) {
+            throw new NullPointerException("Wasn't able to create items from file");
+        }
+
+        for (ItemDTO itemDTO : itemDTOList) {
+            try {
+                createItem(itemDTO);
+            } catch (RuntimeException e) {
+                itemsFail.add(itemDTO);
+            }
+        }
+        return itemsFail;
     }
 
     public GetItemDTO updateItem(int id, UpdateItemDTO itemDTO) {

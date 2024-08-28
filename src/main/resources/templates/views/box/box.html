@@ -17,17 +17,29 @@
                 <tr>
                     <th colspan="100%">
                         <div class="row justify-content-between px-2">
-                            <button type="button" class="btn btn-danger btn-lg col-3" data-bs-toggle="modal"
-                                    data-bs-target="#delete-box-modal">
-                                Remover Caixa
-                            </button>
+                            <div class="col-3 pe-1">
+                                <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal"
+                                        data-bs-target="#delete-box-modal">
+                                    Remover Caixa
+                                </button>
+                            </div>
 
-                            <button type="button" class="btn btn-success btn-lg col-3" data-bs-toggle="modal"
-                                    data-bs-target="#new-item-modal">
-                                Adicionar Item
-                            </button>
+                            <div class="col-3 px-1">
+                                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
+                                        data-bs-target="#new-item-modal">
+                                    Adicionar Item
+                                </button>
+                            </div>
+                            <div class="col-3 px-1">
+                                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
+                                        data-bs-target="#add-items-by-file-modal">
+                                    Adicionar Lista
+                                </button>
+                            </div>
 
-                            <button type="button" class="btn btn-primary btn-lg col-3">Mover Selecionados</button>
+                            <div class="col-3 ps-1">
+                                <button type="button" class="btn btn-primary btn-lg">Mover Selecionados</button>
+                            </div>
                         </div>
                     </th>
                 </tr>
@@ -106,10 +118,15 @@
 
         <div class="container" th:hidden="${!items.isEmpty()}">
             <h3 class="row fs-5 py-4 justify-content-center">Caixa Vazia!</h3>
-            <div class="row justify-content-center">
-                <button type="button" class="btn btn-success btn-lg col-8 col-md-6 col-sm-3" data-bs-toggle="modal"
+            <div class="row justify-content-around">
+                <button type="button" class="btn btn-success btn-lg col-5" data-bs-toggle="modal"
                         data-bs-target="#new-item-modal">
                     Adicionar Item
+                </button>
+
+                <button type="button" class="btn btn-success btn-lg col-5" data-bs-toggle="modal"
+                        data-bs-target="#add-items-by-file-modal">
+                    Adicionar Lista
                 </button>
             </div>
         </div>
@@ -117,6 +134,9 @@
 
     <!--New Item Modal-->
     <div th:replace="~{views/fragments/new-item-modal}"></div>
+
+    <!-- Add Items By File Modal -->
+    <div th:replace="~{views/fragments/add-items-by-file}"></div>
 
     <!-- Delete Box Modal -->
     <div th:replace="~{views/fragments/delete-box-modal}"></div>
@@ -129,53 +149,6 @@
 
     <!-- Items Filter Script -->
     <script th:replace="~{views/fragments/item-list-filter}"></script>
-
-    <script>
-        const newItemModalClose = document.getElementById('close-new-item-modal');
-        const newItemModalClose2 = document.getElementById('close-new-item-modal2');
-        const postNewItemForm = document.getElementById('new-item-form');
-
-        newItemModalClose.addEventListener('click', function () {
-            window.location.reload();
-        });
-
-        newItemModalClose2.addEventListener('click', function () {
-            window.location.reload();
-        });
-
-        postNewItemForm.addEventListener('submit', async function (ev) {
-            ev.preventDefault();
-            const id = document.getElementById('id-modal');
-            const name = document.getElementById('name').value;
-            const comment = document.getElementById('comment').value;
-            const status = document.getElementById('selectStatus');
-            const boxId = document.getElementById('boxId').value;
-            const response = await postItem(id.value, name, comment, status.options[status.selectedIndex].value, boxId);
-
-            if (!response.ok) {
-                alert("Item já cadastrado em outra caixa!")
-            } else {
-                id.value = "";
-            }
-        })
-
-        async function postItem(id, name, comment, status, boxId) {
-            return await fetch("./../../item", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        id: id,
-                        name: name,
-                        comment: comment,
-                        status: status,
-                        boxId: boxId
-                    })
-                }
-            )
-        }
-    </script>
 </div>
 </body>
 </html>

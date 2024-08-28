@@ -1,15 +1,14 @@
 package br.net.rgsul.estoque.controllers;
 
-import br.net.rgsul.estoque.dto.GetItemDTO;
-import br.net.rgsul.estoque.dto.ItemDTO;
-import br.net.rgsul.estoque.dto.MovementDTO;
-import br.net.rgsul.estoque.dto.UpdateItemDTO;
+import br.net.rgsul.estoque.dto.*;
 import br.net.rgsul.estoque.entities.ItemStatus;
 import br.net.rgsul.estoque.services.ItemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("item")
@@ -37,6 +36,11 @@ public class ItemController {
     @PostMapping
     public ResponseEntity<GetItemDTO> createItem(@RequestBody ItemDTO itemDTO) {
         return ResponseEntity.ok(itemService.createItem(itemDTO));
+    }
+
+    @PostMapping("/file")
+    public ResponseEntity<List<ItemDTO>> uploadFile(@ModelAttribute ItemsFileDTO itemsFileDTO) {
+        return ResponseEntity.ok(itemService.createItemsByFile(itemsFileDTO));
     }
 
     @PutMapping("{id}")

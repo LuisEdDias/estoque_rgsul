@@ -68,6 +68,53 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const newItemModalClose = document.getElementById('close-new-item-modal');
+        const newItemModalClose2 = document.getElementById('close-new-item-modal2');
+        const postNewItemForm = document.getElementById('new-item-form');
+
+        newItemModalClose.addEventListener('click', function () {
+            window.location.reload();
+        });
+
+        newItemModalClose2.addEventListener('click', function () {
+            window.location.reload();
+        });
+
+        postNewItemForm.addEventListener('submit', async function (ev) {
+            ev.preventDefault();
+            const id = document.getElementById('id-modal');
+            const name = document.getElementById('name').value;
+            const comment = document.getElementById('comment').value;
+            const status = document.getElementById('selectStatus');
+            const boxId = document.getElementById('boxId').value;
+            const response = await postItem(id.value, name, comment, status.options[status.selectedIndex].value, boxId);
+
+            if (!response.ok) {
+                alert("Item já cadastrado em outra caixa!")
+            } else {
+                id.value = "";
+            }
+        })
+
+        async function postItem(id, name, comment, status, boxId) {
+            return await fetch("./../../item", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        name: name,
+                        comment: comment,
+                        status: status,
+                        boxId: boxId
+                    })
+                }
+            )
+        }
+    </script>
 </div>
 </body>
 </html>
