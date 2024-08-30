@@ -5,41 +5,48 @@
     <title>Adicionar Lista de Itens</title>
 </head>
 <body>
-<div th:fragment="add-items-by-file-modal" class="modal fade" id="add-items-by-file-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div th:fragment="add-items-by-file-modal" class="modal fade" id="add-items-by-file-modal" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1"
      aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="./../item/file" method="POST" enctype="multipart/form-data">
+            <form class="container" method="post" action="./../item/file" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5">Adicionar Lista de Itens</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Lista de Itens</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
                     <div class="row justify-content-center">
-                        <div class="col-lg-9 pb-4">
+                        <div class="col-10 pb-4">
                             <div data-mdb-input-init class="form-outline">
-                                <label for="file" class="form-label">Arquivo</label>
-                                <input class="form-control" type="file" id="file" name="file"
+                                <input class="form-control text-black-75" type="file" id="file" name="file"
                                        placeholder="Extensão .xlsx" required>
+                                <label for="file" class="visually-hidden">Arquivo</label>
                             </div>
                         </div>
 
-                        <div class="d-lg-flex col-lg-9 justify-content-lg-between">
+                        <div class="col-10 pb-4">
                             <div data-mdb-input-init class="form-outline">
-                                <textarea name="comment" class="form-control fs-4" id="comment" rows="1"></textarea>
+                                <textarea name="comment" class="form-control fs-4" id="comment"></textarea>
                                 <label for="comment" class="form-label">Comentário</label>
                             </div>
                         </div>
+
                         <div class="col-12" hidden="hidden">
                             <input name="boxId" type="text" class="form-control fs-4" id="boxId"
                                    th:value="${box.id()}"/>
                             <label class="form-label fs-4 me-1" for="boxId">Status</label>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger" id="add-items"><a>Adicionar</a></button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">Adicionar</button>
+                    </div>
                 </div>
             </form>
         </div>

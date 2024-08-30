@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.net.rgsul</groupId>
 	<artifactId>estoque</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>v1.0</version>
 	<name>estoque</name>
 	<description>Auxiliar de conferência</description>
 	<url/>

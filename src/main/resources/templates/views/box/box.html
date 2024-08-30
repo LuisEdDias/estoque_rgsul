@@ -10,8 +10,8 @@
 </head>
 <body>
 <div layout:fragment="conteudo">
-    <div class="row align-items-center justify-content-center">
-        <div class="align-middle mb-0 bg-white" th:hidden="${items == null || items.isEmpty()}">
+    <div class="row align-items-center justify-content-center vh-50">
+        <div class="list-group align-middle mb-0 bg-white" th:hidden="${items == null || items.isEmpty()}">
             <table class="table table-hover table-sm text-center">
                 <thead class="sticky-top">
                 <tr>
@@ -31,14 +31,14 @@
                                 </button>
                             </div>
                             <div class="col-3 px-1">
-                                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
                                         data-bs-target="#add-items-by-file-modal">
                                     Adicionar Lista
                                 </button>
                             </div>
 
                             <div class="col-3 ps-1">
-                                <button type="button" class="btn btn-primary btn-lg">Mover Selecionados</button>
+                                <button type="button" class="btn btn-light btn-lg border border-black text-dark">Mover Selecionados</button>
                             </div>
                         </div>
                     </th>
@@ -71,7 +71,7 @@
                         </div>
                     </th>
                     <th scope="col" class="col-2">
-                        <div class="form-outline" data-mdb-input-init>
+                        <div class="form-outline">
                             <label class="visually-hidden" for="select-status"></label>
                             <select class="form-select" id="select-status" data-mdb-select-init>
                                 <option selected>Status</option>
@@ -117,14 +117,14 @@
         </div>
 
         <div class="container" th:hidden="${!items.isEmpty()}">
-            <h3 class="row fs-5 py-4 justify-content-center">Caixa Vazia!</h3>
+            <h1 class="row py-4 justify-content-center">Caixa Vazia!</h1>
             <div class="row justify-content-around">
-                <button type="button" class="btn btn-success btn-lg col-5" data-bs-toggle="modal"
+                <button type="button" class="btn btn-success btn-lg col-4" data-bs-toggle="modal"
                         data-bs-target="#new-item-modal">
                     Adicionar Item
                 </button>
 
-                <button type="button" class="btn btn-success btn-lg col-5" data-bs-toggle="modal"
+                <button type="button" class="btn btn-primary btn-lg col-4" data-bs-toggle="modal"
                         data-bs-target="#add-items-by-file-modal">
                     Adicionar Lista
                 </button>

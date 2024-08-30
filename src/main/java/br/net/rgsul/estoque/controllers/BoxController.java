@@ -21,6 +21,7 @@ public class BoxController {
 
     @GetMapping
     public String index(Model model) {
+        model.addAttribute("boxStatus", BoxStatus.values());
         model.addAttribute("boxes", boxService.findAll());
         return "views/box/index";
     }
@@ -31,12 +32,6 @@ public class BoxController {
         model.addAttribute("box", boxService.getBoxById(id));
         model.addAttribute("itemStatus", ItemStatus.values());
         return "views/box/box";
-    }
-
-    @GetMapping("new-box")
-    public String newBox(Model model){
-        model.addAttribute("boxStatus", BoxStatus.values());
-        return "views/box/new-box";
     }
 
     @PostMapping

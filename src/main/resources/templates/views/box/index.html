@@ -9,47 +9,51 @@
     <title>Caixas</title>
 </head>
 <body>
-    <div layout:fragment="conteudo">
-        <div class="row align-items-center justify-content-center vh-50">
-            <div class="list-group align-middle mb-0 bg-white" th:hidden="${boxes == null || boxes.isEmpty()}">
-                <table class="table table-hover table-sm text-center">
-                    <thead class="sticky-top">
-                        <tr class="table-secondary">
-                            <th scope="col" class="col-auto">Nome</th>
-                            <th scope="col" class="col-1">Número</th>
-                            <th scope="col" class="col-auto">Comentário</th>
-                            <th scope="col" class="col-2">Status</th>
-                            <th scope="col" class="col-2">Atualizado</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-hover" th:each="box : ${boxes}">
-                        <tr>
-                            <td th:text="${box.name()}"></td>
-                            <td th:text="${box.id()}"></td>
-                            <td th:text="${box.description()}"></td>
-                            <td th:text="${box.status()}"></td>
-                            <td th:text="${box.updated()}"></td>
-                            <td>
-                                <button type="button" class="btn btn-outline-primary w-75 my-1">
-                                    <a th:href="@{'box/' + ${box.id()}}">Ver</a>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+<div layout:fragment="conteudo">
+    <div class="row align-items-center justify-content-center vh-50">
+        <div class="list-group align-middle mb-0 bg-white" th:hidden="${boxes == null || boxes.isEmpty()}">
+            <table class="table table-hover table-sm text-center">
+                <thead class="sticky-top">
+                <tr class="table-secondary">
+                    <th scope="col" class="col-auto">Nome</th>
+                    <th scope="col" class="col-1">Número</th>
+                    <th scope="col" class="col-auto">Comentário</th>
+                    <th scope="col" class="col-2">Status</th>
+                    <th scope="col" class="col-2">Atualizado</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody class="table-hover" th:each="box : ${boxes}">
+                <tr>
+                    <td th:text="${box.name()}"></td>
+                    <td th:text="${box.id()}"></td>
+                    <td th:text="${box.description()}"></td>
+                    <td th:text="${box.status()}"></td>
+                    <td th:text="${box.updated()}"></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary w-75 my-1">
+                            <a th:href="@{'box/' + ${box.id()}}">Ver</a>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container">
+            <div class="flex-column" th:hidden="${!boxes.isEmpty()}">
+                <h3 class="row fs-5 py-4 justify-content-center">Não existem caixas cadastradas!</h3>
             </div>
-            <div class="container">
-                <div class="flex-column" th:hidden="${!boxes.isEmpty()}">
-                    <h3 class="row fs-5 py-4 justify-content-center" >Não existem caixas cadastradas!</h3>
-                </div>
-                <div class="row justify-content-center">
-                    <button type="button" class="btn btn-success btn-lg col-8 col-md-6 col-sm-3">
-                        <a href="box/new-box" class="text-white">Nova Caixa</a>
-                    </button>
-                </div>
+            <div class="row justify-content-center">
+                <button type="button" class="btn btn-success btn-lg col-8 col-md-6 col-sm-3"
+                        data-bs-toggle="modal" data-bs-target="#new-box-modal">
+                    Adicionar Caixa
+                </button>
             </div>
         </div>
     </div>
+
+    <!--New Box Modal-->
+    <div th:replace="~{views/fragments/new-box-modal}"></div>
+</div>
 </body>
 </html>
