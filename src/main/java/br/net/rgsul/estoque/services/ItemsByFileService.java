@@ -19,8 +19,8 @@ public class ItemsByFileService {
         List<ItemDTO> items = new ArrayList<>();
         String comment = fileDTO.comment();
         int boxId = fileDTO.boxId();
-        int colName = 1;
-        int colId = 2;
+        int colId = 1;
+        int colName = 2;
         int colStatus = 3;
 
         try (InputStream itemsFile = fileDTO.file().getInputStream();

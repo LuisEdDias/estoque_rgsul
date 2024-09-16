@@ -10,7 +10,8 @@
      aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="container" method="post" action="./../item/file" enctype="multipart/form-data">
+            <form class="container" method="post" action="./../item/file"
+                  id="add-items-by-file-form" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Lista de Itens</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -35,9 +36,9 @@
                         </div>
 
                         <div class="col-12" hidden="hidden">
-                            <input name="boxId" type="text" class="form-control fs-4" id="boxId"
+                            <input name="boxId" type="text" class="form-control fs-4" id="box-id-add-list"
                                    th:value="${box.id()}"/>
-                            <label class="form-label fs-4 me-1" for="boxId">Status</label>
+                            <label class="form-label fs-4 me-1" for="box-id-add-list">Status</label>
                         </div>
                     </div>
 

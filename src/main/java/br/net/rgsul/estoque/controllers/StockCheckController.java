@@ -2,6 +2,9 @@ package br.net.rgsul.estoque.controllers;
 
 import br.net.rgsul.estoque.dto.StockCheckDTO;
 import br.net.rgsul.estoque.entities.FileDownload;
+import br.net.rgsul.estoque.entities.Item;
+import br.net.rgsul.estoque.repositories.ItemRepository;
+import br.net.rgsul.estoque.services.ItemService;
 import br.net.rgsul.estoque.services.StockCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -13,17 +16,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.util.List;
 
 @Controller
 @RequestMapping("check")
 public class StockCheckController {
     @Autowired
     private StockCheckService stockCheckService;
-
-    @GetMapping
-    public String form() {
-        return "views/form";
-    }
+    @Autowired
+    private ItemRepository itemRepository;
 
     @GetMapping("completed")
     public String index() {
@@ -32,7 +33,8 @@ public class StockCheckController {
 
     @PostMapping
     public String execute(@ModelAttribute StockCheckDTO stockCheckDTO){
-        stockCheckService.stockCheck(stockCheckDTO);
+        List<Item> items = itemRepository.findAllBySaved(true);
+        stockCheckService.stockCheck(stockCheckDTO, items);
         return "views/completed";
     }
 

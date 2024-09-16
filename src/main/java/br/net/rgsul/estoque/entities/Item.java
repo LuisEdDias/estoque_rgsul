@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "items")
@@ -27,7 +28,8 @@ public class Item {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Box box;
 
-    public Item() {}
+    public Item() {
+    }
 
     public Item(ItemDTO itemDTO, Box box) {
         this.id = itemDTO.id();
@@ -55,11 +57,14 @@ public class Item {
         this.updated = new Timestamp(System.currentTimeMillis());
     }
 
-    public void move(MovementDTO movementDTO, Box box){
+    public void move(MovementDTO movementDTO, Box box) {
         this.updated = new Timestamp(System.currentTimeMillis());
         this.itemStatus = movementDTO.status();
         this.comment = movementDTO.comment();
         this.box = box;
+        if (box == null) {
+            saved = false;
+        }
     }
 
     public int getId() {
@@ -88,5 +93,14 @@ public class Item {
 
     public Box getBox() {
         return box;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id +
+                " Name: " + name +
+                " Comment: " + comment +
+                " Updated: " + updated.toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) +
+                " Box: " + box.getId();
     }
 }

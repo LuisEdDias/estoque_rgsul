@@ -98,7 +98,6 @@ public class ItemService {
     }
 
     public GetItemDTO movItem(int id, MovementDTO movementDTO) {
-        System.out.println(id + " " + movementDTO.boxId() + " " + movementDTO.comment() + " " + movementDTO.status());
         Item item = itemRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("Item not found")
         );
