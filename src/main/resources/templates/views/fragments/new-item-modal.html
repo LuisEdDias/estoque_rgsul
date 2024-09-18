@@ -18,6 +18,9 @@
                                 aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <div id="alert-add-item-success" class="alert alert-success text-center" role="alert" style="display: none">
+                            Item adicionado com sucesso!
+                        </div>
                         <div class="row justify-content-center">
                             <div class="col-lg-9 pb-4">
                                 <div data-mdb-input-init class="form-outline">
@@ -77,6 +80,7 @@
         const newItemModalClose = document.getElementById('close-new-item-modal');
         const newItemModalClose2 = document.getElementById('close-new-item-modal2');
         const postNewItemForm = document.getElementById('new-item-form');
+        const alertAddItemSuccess = document.getElementById('alert-add-item-success');
 
         newItemModalClose.addEventListener('click', function () {
             window.location.reload();
@@ -99,6 +103,9 @@
                 alert("Item já cadastrado em outra caixa!")
             } else {
                 id.value = "";
+                alertAddItemSuccess.style.display = 'block';
+                await new Promise(r => setTimeout(r, 2000));
+                alertAddItemSuccess.style.display = 'none';
             }
         })
 
