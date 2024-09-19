@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Caixa</title>
+</head>
+<body>
+<div th:fragment="update-box-modal" class="modal fade" id="update-box-modal" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="container" id="update-box-form">
+                <div class="row justify-content-center">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Editar Caixa</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-9 pb-4">
+                                <div data-mdb-input-init class="form-outline">
+                                    <input name="name" type="text" id="box-name-modal"
+                                           class="form-control text-black-75 fs-4" required th:value="${box.name()}"/>
+                                    <label class="form-label" for="box-name-modal">Nome</label>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-9 pb-4 d-flex justify-content-between">
+                                <div class="col-5">
+                                    <div data-mdb-input-init class="form-outline">
+                                        <input name="box-id-modal" type="text" id="box-id-modal" class="form-control text-black-75 fs-4"
+                                               th:value="${box.id()}" disabled />
+                                        <label class="form-label" for="box-id-modal"></label>
+                                    </div>
+                                </div>
+
+                                <div class="col-5 d-flex align-items-center">
+                                    <label class="visually-hidden" for="box-status-modal">Status</label>
+                                    <select class="custom-select h-100" name="status" id="box-status-modal" required>
+                                        <option th:each="stt : ${boxStatus}"
+                                                th:value="${stt}"
+                                                th:text="${stt.nameStr}"
+                                                th:selected="${stt.nameStr == box.status()}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-9 pb-4">
+                                <div data-mdb-input-init class="form-outline">
+                                    <textarea name="description" class="form-control fs-4" id="box-description-modal"
+                                              th:text="${box.description()}"></textarea>
+                                    <label for="box-description-modal" class="form-label">Descrição</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary" >Atualizar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const updateBoxForm = document.getElementById('update-box-form');
+
+        updateBoxForm.addEventListener('submit', async function (ev) {
+            ev.preventDefault();
+            const name = document.getElementById('box-name-modal').value;
+            const description = document.getElementById('box-description-modal').value;
+            const status = document.getElementById('box-status-modal');
+            const boxId = document.getElementById('box-id-modal').value;
+            const response = await updateBox(boxId, name, description, status.options[status.selectedIndex].value);
+
+            if (!response.ok) {
+                alert("Não foi possível atualizar os dados da caixa!")
+            } else {
+                window.location.reload();
+            }
+        })
+
+        async function updateBox(id, name, description, status) {
+            return await fetch("./../../box/" + id, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        name: name,
+                        description: description,
+                        status: status
+                    })
+                }
+            )
+        }
+    </script>
+</div>
+</body>
+</html>

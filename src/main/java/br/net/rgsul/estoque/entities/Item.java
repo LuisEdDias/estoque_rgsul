@@ -25,7 +25,6 @@ public class Item {
     private Timestamp updated;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Box box;
 
     public Item() {
@@ -62,9 +61,7 @@ public class Item {
         this.itemStatus = movementDTO.status();
         this.comment = movementDTO.comment();
         this.box = box;
-        if (box == null) {
-            saved = false;
-        }
+        saved = box != null;
     }
 
     public int getId() {

@@ -10,145 +10,175 @@
 </head>
 <body>
 <div layout:fragment="conteudo">
-    <div class="row align-items-center justify-content-center vh-50">
-        <div class="list-group align-middle mb-0 bg-white" th:hidden="${items == null || items.isEmpty()}">
-            <table class="table table-hover table-sm text-center">
-                <thead class="sticky-top">
-                <tr>
-                    <th colspan="100%">
-                        <div class="row justify-content-between px-2">
-                            <div class="col-3 pe-1">
-                                <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal"
+    <div class="row align-items-center justify-content-center">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col col-xl-10">
+                    <div class="card mb-5 rounded-9 border-black border">
+                        <div class="card-body p-4">
+                            <h3 class="mb-3">Caixa <i th:text="${box.id()}"></i> : <i th:text="${box.name()}"></i></h3>
+                            <p class="mb-0" th:text="${box.description()}"></p>
+                            <hr class="my-4">
+                            <div class="d-flex justify-content-start align-items-center gap-5">
+                                <p class="mb-0 fw-bold text-muted">Total de Itens: <i class="text-black"
+                                                                                      th:text="${items.size()}"></i></p>
+                                <p class="mb-0 fw-bold text-muted">Status: <i class="text-black"
+                                                                              th:text="${box.status()}"></i></p>
+                                <p class="mb-0 text-uppercase"><span class="ms-3 me-4">|</span></p>
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
                                         data-bs-target="#delete-box-modal">
                                     Remover Caixa
                                 </button>
-                            </div>
-
-                            <div class="col-3 px-1">
-                                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
-                                        data-bs-target="#new-item-modal">
-                                    Adicionar Item
+                                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
+                                        data-bs-target="#update-box-modal">
+                                    Editar
                                 </button>
                             </div>
-                            <div class="col-3 px-1">
-                                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
-                                        data-bs-target="#add-items-by-file-modal">
-                                    Adicionar Lista
-                                </button>
-                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group align-middle mb-0 bg-white" th:hidden="${items == null || items.isEmpty()}">
+                        <table class="table table-hover table-sm text-center">
+                            <thead class="sticky-top">
+                            <tr>
+                                <th colspan="100%">
+                                    <div class="row justify-content-between px-2">
+                                        <div class="col-4 pe-1">
+                                            <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
+                                                    data-bs-target="#new-item-modal">
+                                                Adicionar Item
+                                            </button>
+                                        </div>
+                                        <div class="col-4 px-1">
+                                            <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                                                    data-bs-target="#add-items-by-file-modal">
+                                                Adicionar Lista
+                                            </button>
+                                        </div>
 
-                            <div class="col-3 ps-1">
-                                <button type="button" class="btn btn-light btn-lg border border-black text-dark">Mover Selecionados</button>
-                            </div>
-                        </div>
-                    </th>
-                </tr>
-                <tr class="table-secondary" id="table-input">
-                    <th scope="col">
-                        <div class="form-check">
-                            <label>
-                                <input class="form-check-input" type="checkbox" id="select-all"/>
-                            </label>
-                        </div>
-                    </th>
-                    <th scope="col" class="col-2">
-                        <div class="form-outline" data-mdb-input-init>
-                            <input type="text" class="form-control bg-white" id="search-item-id" placeholder="ID">
-                            <label class="form-label" for="search-item-id">ID</label>
-                        </div>
-                    </th>
-                    <th scope="col" class="col-auto">
-                        <div class="form-outline" data-mdb-input-init>
-                            <input type="text" class="form-control bg-white" id="search-item" placeholder="Item">
-                            <label class="form-label" for="search-item">Item</label>
-                        </div>
-                    </th>
-                    <th scope="col" class="col-2 align-items-center">
-                        <div class="form-outline" data-mdb-input-init>
-                            <input type="text" class="form-control bg-white" id="search-updated"
-                                   placeholder="dd/mm/aaaa" maxlength="10">
-                            <label class="form-label" for="search-updated">Atualizado</label>
-                        </div>
-                    </th>
-                    <th scope="col" class="col-2">
-                        <div class="form-outline">
-                            <label class="visually-hidden" for="select-status"></label>
-                            <select class="form-select" id="select-status" data-mdb-select-init>
-                                <option selected>Status</option>
+                                        <div class="col-4 ps-1">
+                                            <button type="button"
+                                                    class="btn btn-light btn-lg border border-black text-dark">Mover
+                                                Selecionados
+                                            </button>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr class="table-secondary" id="table-input">
+                                <th scope="col">
+                                    <div class="form-check">
+                                        <label>
+                                            <input class="form-check-input" type="checkbox" id="select-all"/>
+                                        </label>
+                                    </div>
+                                </th>
+                                <th scope="col" class="col-2">
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" class="form-control bg-white" id="search-item-id"
+                                               placeholder="ID">
+                                        <label class="form-label" for="search-item-id">ID</label>
+                                    </div>
+                                </th>
+                                <th scope="col" class="col-auto">
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" class="form-control bg-white" id="search-item"
+                                               placeholder="Item">
+                                        <label class="form-label" for="search-item">Item</label>
+                                    </div>
+                                </th>
+                                <th scope="col" class="col-2 align-items-center">
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" class="form-control bg-white" id="search-updated"
+                                               placeholder="dd/mm/aaaa" maxlength="10">
+                                        <label class="form-label" for="search-updated">Atualizado</label>
+                                    </div>
+                                </th>
+                                <th scope="col" class="col-2">
+                                    <div class="form-outline">
+                                        <label class="visually-hidden" for="select-status"></label>
+                                        <select class="form-select" id="select-status" data-mdb-select-init>
+                                            <option selected>Status</option>
 
-                                <option th:each="stt : ${itemStatus}"
-                                        th:value="${stt}"
-                                        th:text="${stt.nameStr}">
-                                </option>
-                            </select>
-                        </div>
-                    </th>
-                    <th scope="col">
-                    </th>
-                </tr>
-                </thead>
-                <tbody th:each="item : ${items}">
-                <tr class="table-item-row">
-                    <td>
-                        <div class="form-check">
-                            <label>
-                                <input class="form-check-input item-checkbox" type="checkbox" th:value="${item.id()}"
-                                       th:id="${item.id()}"/>
-                            </label>
-                        </div>
-                    </td>
-                    <td class="item-id text-start fw-medium" th:text="${item.id()}"></td>
-                    <td class="item text-start fw-medium">
-                        <a class="d-block w-100 h-100 text-reset" th:href="@{'./../item/' + ${item.id()}}"
-                           th:text="${item.name()}"></a>
-                    </td>
-                    <td class="updated" th:text="${item.updated()}"></td>
-                    <td class="status" th:text="${item.status()}"></td>
-                    <td>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#move-item-modal"
-                                th:attr="data-id=${item.id()},data-status=${item.status()}"
-                        >
-                            Mover
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+                                            <option th:each="stt : ${itemStatus}"
+                                                    th:value="${stt}"
+                                                    th:text="${stt.nameStr}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </th>
+                                <th scope="col">
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody th:each="item : ${items}">
+                            <tr class="table-item-row">
+                                <td>
+                                    <div class="form-check">
+                                        <label>
+                                            <input class="form-check-input item-checkbox" type="checkbox"
+                                                   th:value="${item.id()}"
+                                                   th:id="${item.id()}"/>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="item-id text-start fw-medium" th:text="${item.id()}"></td>
+                                <td class="item text-start fw-medium">
+                                    <a class="d-block w-100 h-100 text-reset" th:href="@{'./../item/' + ${item.id()}}"
+                                       th:text="${item.name()}"></a>
+                                </td>
+                                <td class="updated" th:text="${item.updated()}"></td>
+                                <td class="status" th:text="${item.status()}"></td>
+                                <td>
+                                    <button type="button" data-bs-toggle="modal" data-bs-target="#move-item-modal"
+                                            th:attr="data-id=${item.id()},data-status=${item.status()}"
+                                    >
+                                        Mover
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-        <div class="container" th:hidden="${!items.isEmpty()}">
-            <h1 class="row py-4 justify-content-center">Caixa Vazia!</h1>
-            <div class="row justify-content-around">
-                <button type="button" class="btn btn-success btn-lg col-4" data-bs-toggle="modal"
-                        data-bs-target="#new-item-modal">
-                    Adicionar Item
-                </button>
+                    <div class="container" th:hidden="${!items.isEmpty()}">
+                        <h1 class="row py-4 justify-content-center">Caixa Vazia!</h1>
+                        <div class="row justify-content-around">
+                            <button type="button" class="btn btn-success btn-lg col-4" data-bs-toggle="modal"
+                                    data-bs-target="#new-item-modal">
+                                Adicionar Item
+                            </button>
 
-                <button type="button" class="btn btn-primary btn-lg col-4" data-bs-toggle="modal"
-                        data-bs-target="#add-items-by-file-modal">
-                    Adicionar Lista
-                </button>
+                            <button type="button" class="btn btn-primary btn-lg col-4" data-bs-toggle="modal"
+                                    data-bs-target="#add-items-by-file-modal">
+                                Adicionar Lista
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--New Item Modal-->
+                <div th:replace="~{views/fragments/new-item-modal}"></div>
+
+                <!-- Add Items By File Modal -->
+                <div th:replace="~{views/fragments/add-items-by-file}"></div>
+
+                <!-- Update Box Modal -->
+                <div th:replace="~{views/fragments/update-box-modal}"></div>
+
+                <!-- Delete Box Modal -->
+                <div th:replace="~{views/fragments/delete-box-modal}"></div>
+
+                <!-- Move Item Modal -->
+                <div th:replace="~{views/fragments/move-item-modal}"></div>
+
+                <!-- Move All Selected Items Script -->
+                <script th:replace="~{views/fragments/move-all-script}"></script>
+
+                <!-- Items Filter Script -->
+                <script th:replace="~{views/fragments/item-list-filter}"></script>
             </div>
         </div>
     </div>
-
-    <!--New Item Modal-->
-    <div th:replace="~{views/fragments/new-item-modal}"></div>
-
-    <!-- Add Items By File Modal -->
-    <div th:replace="~{views/fragments/add-items-by-file}"></div>
-
-    <!-- Delete Box Modal -->
-    <div th:replace="~{views/fragments/delete-box-modal}"></div>
-
-    <!-- Move Item Modal -->
-    <div th:replace="~{views/fragments/move-item-modal}"></div>
-
-    <!-- Move All Selected Items Script -->
-    <script th:replace="~{views/fragments/move-all-script}"></script>
-
-    <!-- Items Filter Script -->
-    <script th:replace="~{views/fragments/item-list-filter}"></script>
 </div>
 </body>
 </html>

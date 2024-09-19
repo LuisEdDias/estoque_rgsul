@@ -31,6 +31,7 @@ public class BoxController {
         model.addAttribute("items", boxService.findAllItems(id));
         model.addAttribute("box", boxService.getBoxById(id));
         model.addAttribute("itemStatus", ItemStatus.values());
+        model.addAttribute("boxStatus", BoxStatus.values());
         return "views/box/box";
     }
 

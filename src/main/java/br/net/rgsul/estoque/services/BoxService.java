@@ -50,7 +50,9 @@ public class BoxService {
     }
 
     public void delete(int id) {
-        boxRepository.deleteById(id);
+        Box box = boxRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        itemService.removeItemFromBox(box);
+        boxRepository.delete(box);
     }
 
     public List<GetItemDTO> findAllItems(int id) {

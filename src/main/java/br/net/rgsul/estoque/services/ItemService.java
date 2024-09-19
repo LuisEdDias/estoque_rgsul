@@ -8,6 +8,7 @@ import br.net.rgsul.estoque.repositories.BoxRepository;
 import br.net.rgsul.estoque.repositories.ItemRepository;
 import br.net.rgsul.estoque.repositories.MovementRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,5 +125,10 @@ public class ItemService {
         }
 
         return new GetItemDTO(itemRepository.save(item));
+    }
+
+    @Transactional
+    public void removeItemFromBox(Box box) {
+        itemRepository.updateItemsFromDeletedBox(box);
     }
 }
