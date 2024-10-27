@@ -4,11 +4,10 @@ import br.net.rgsul.estoque.dto.ItemDTO;
 import br.net.rgsul.estoque.dto.MovementDTO;
 import br.net.rgsul.estoque.dto.UpdateItemDTO;
 import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 @Table(name = "items")
@@ -23,6 +22,9 @@ public class Item {
     private boolean saved;
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updated;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Movement> movements;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Box box;
@@ -46,6 +48,7 @@ public class Item {
         this.itemStatus = itemDTO.status();
         this.updated = new Timestamp(System.currentTimeMillis());
         this.box = box;
+        this.saved = box != null;
         return this;
     }
 
@@ -86,6 +89,10 @@ public class Item {
 
     public Timestamp getUpdated() {
         return updated;
+    }
+
+    public List<Movement> getMovements() {
+        return movements;
     }
 
     public Box getBox() {

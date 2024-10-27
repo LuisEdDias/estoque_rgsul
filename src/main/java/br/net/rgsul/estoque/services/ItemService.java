@@ -128,6 +128,13 @@ public class ItemService {
     }
 
     @Transactional
+    public void deleteItem(int id) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Item not found"));
+        itemRepository.delete(item);
+    }
+
+    @Transactional
     public void removeItemFromBox(Box box) {
         itemRepository.updateItemsFromDeletedBox(box);
     }

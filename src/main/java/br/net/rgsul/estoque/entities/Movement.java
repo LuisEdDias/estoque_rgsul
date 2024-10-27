@@ -1,6 +1,8 @@
 package br.net.rgsul.estoque.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.sql.Timestamp;
 
@@ -18,7 +20,7 @@ public class Movement {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp date;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Item item;
 
     public Movement(){}

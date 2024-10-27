@@ -53,4 +53,10 @@ public class ItemController {
     public ResponseEntity<GetItemDTO> movItem(@PathVariable int id, @RequestBody MovementDTO movementDTO) {
         return ResponseEntity.ok(itemService.movItem(id, movementDTO));
     }
+
+    @DeleteMapping("{id}")
+    public String deleteItem(@PathVariable int id) {
+        itemService.deleteItem(id);
+        return "views/index";
+    }
 }

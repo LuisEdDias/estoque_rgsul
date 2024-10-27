@@ -86,7 +86,7 @@
                 Editar
             </button>
             <button type="button" class="btn btn-lg btn-outline-danger col-9" data-bs-toggle="modal"
-                    data-bs-target="#delete-box-modal">
+                    data-bs-target="#delete-item-modal">
                 Remover
             </button>
         </div>
@@ -121,6 +121,9 @@
 
     <!--Move Item Modal-->
     <div th:replace="~{views/fragments/update-item-modal}"></div>
+
+    <!--Delete Item Modal-->
+    <div th:replace="~{views/fragments/delete-item-modal}"></div>
 </div>
 </body>
 </html>
