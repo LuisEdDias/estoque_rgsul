@@ -67,10 +67,11 @@ public class ItemService {
             itemAux = new Item(itemDTO, box);
         }
 
+        itemRepository.save(itemAux);
         box.setUpdated();
         boxRepository.save(box);
         movementRepository.save(new Movement(itemAux));
-        return new GetItemDTO(itemRepository.save(itemAux));
+        return new GetItemDTO(itemAux);
     }
 
     public List<ItemDTO> createItemsByFile(ItemsFileDTO fileDTO) {
