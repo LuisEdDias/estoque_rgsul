@@ -43,7 +43,7 @@ public class ItemService {
     }
 
     public List<GetItemDTO> getAll() {
-        List<Item> items = itemRepository.findAll();
+        List<Item> items = itemRepository.findAllBySaved(true);
         return items.stream().map(GetItemDTO::new).toList();
     }
 

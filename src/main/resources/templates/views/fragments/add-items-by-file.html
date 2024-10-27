@@ -5,53 +5,148 @@
     <title>Adicionar Lista de Itens</title>
 </head>
 <body>
-<div th:fragment="add-items-by-file-modal" class="modal fade" id="add-items-by-file-modal" data-bs-backdrop="static"
-     data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form class="container" method="post" action="./../item/file"
-                  id="add-items-by-file-form" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Lista de Itens</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                </div>
+<div th:fragment="add-items-by-file-modal">
+    <div class="modal fade" id="add-items-by-file-modal" data-bs-backdrop="static"
+         data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="container" method="post" action="./../item/file"
+                      id="add-items-by-file-form" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Lista de Itens</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
 
-                <div class="modal-body">
-                    <div class="row justify-content-center">
-                        <div class="col-10 pb-4">
-                            <div data-mdb-input-init class="form-outline">
-                                <input class="form-control text-black-75" type="file" id="file" name="file"
-                                       placeholder="Extensão .xlsx" required>
-                                <label for="file" class="visually-hidden">Arquivo</label>
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="col-10 pb-4">
+                                <div data-mdb-input-init class="form-outline">
+                                    <input class="form-control text-black-75" type="file" id="file" name="file"
+                                           placeholder="Extensão .xlsx" required>
+                                    <label for="file" class="visually-hidden">Arquivo</label>
+                                </div>
+                            </div>
+
+                            <div class="col-10 pb-4">
+                                <div data-mdb-input-init class="form-outline">
+                                    <textarea name="comment" class="form-control fs-4" id="comment"></textarea>
+                                    <label for="comment" class="form-label">Comentário</label>
+                                </div>
+                            </div>
+
+                            <div class="col-12" hidden="hidden">
+                                <input name="boxId" type="text" class="form-control fs-4" id="box-id-add-list"
+                                       th:value="${box.id()}"/>
+                                <label class="form-label fs-4 me-1" for="box-id-add-list">Status</label>
                             </div>
                         </div>
 
-                        <div class="col-10 pb-4">
-                            <div data-mdb-input-init class="form-outline">
-                                <textarea name="comment" class="form-control fs-4" id="comment"></textarea>
-                                <label for="comment" class="form-label">Comentário</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12" hidden="hidden">
-                            <input name="boxId" type="text" class="form-control fs-4" id="box-id-add-list"
-                                   th:value="${box.id()}"/>
-                            <label class="form-label fs-4 me-1" for="box-id-add-list">Status</label>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary">Adicionar</button>
                         </div>
                     </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Cancelar
-                        </button>
-                        <button type="submit" class="btn btn-primary">Adicionar</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
+
+    <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="resultModalLabel">Lista de Falha</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close" onclick="window.location.reload()"></button>
+                </div>
+                <div class="modal-body">
+                    <h2>Itens Não Adicionados</h2>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Item</th>
+                        </tr>
+                        </thead>
+                        <tbody id="failed-items">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            onclick="window.location.reload()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const addItemByFileForm = document.getElementById('add-items-by-file-form');
+            const fileInput = document.getElementById('file');
+            const commentInput = document.getElementById('comment');
+            const boxIdInput = document.getElementById('box-id-add-list');
+            const failedItemsModal = new bootstrap.Modal(document.getElementById('resultModal'));
+            const failedItemsList = document.getElementById('failed-items');
+
+            addItemByFileForm.addEventListener('submit', async function (ev) {
+                ev.preventDefault();
+
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+                formData.append('comment', commentInput.value);
+                formData.append('boxId', boxIdInput.value);
+
+                try {
+                    const response = await postItemsByFile(formData);
+
+                    if (!response.ok) {
+                        alert("Erro ao adicionar os itens!");
+                    } else {
+                        const responseData = await response.json();
+
+                        if (Array.isArray(responseData) && responseData.length > 0) {
+                            populateList(responseData);
+                        } else {
+                            window.location.reload();
+                        }
+                    }
+                } catch (error) {
+                    console.error("Erro:", error);
+                    alert("Erro ao adicionar os itens!");
+                }
+            });
+
+            async function postItemsByFile(formData) {
+                return await fetch('./../item/file', {
+                    method: 'POST',
+                    body: formData
+                });
+            }
+
+            function populateList(items) {
+                items.forEach(item => {
+                    const listItem = document.createElement('tr');
+                    const itemId = document.createElement('td');
+                    const itemName = document.createElement('td');
+
+                    itemId.textContent = item.id;
+                    itemName.textContent = item.name;
+
+                    listItem.append(itemId, itemName);
+                    failedItemsList.append(listItem);
+                });
+
+                failedItemsModal.show();
+            }
+        });
+    </script>
 </div>
 </body>
 </html>

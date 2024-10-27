@@ -98,6 +98,7 @@
 					<include>**/*.properties</include>
 					<include>**/*.xml</include>
 					<include>**/*.html</include>
+					<include>**/*.xlsx</include>
 				</includes>
 			</resource>
 		</resources>

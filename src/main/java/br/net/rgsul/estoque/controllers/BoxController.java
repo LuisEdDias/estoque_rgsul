@@ -38,7 +38,7 @@ public class BoxController {
     @PostMapping
     public String create(BoxDTO boxDTO){
         boxService.save(boxDTO);
-        return "redirect:/box";
+        return "redirect:/box/" + boxDTO.id();
     }
 
     @PutMapping("{id}")

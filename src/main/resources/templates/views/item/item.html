@@ -6,12 +6,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Caixas</title>
+    <title>Item</title>
 </head>
 <body>
     <div layout:fragment="conteudo">
-        <div class="row justify-content-between mb-0 bg-white">
-                <div class="col-6 card rounded-3 border border-black p-2">
+                <div class="col-6 card rounded-3 border border-black p-3 d-flex mb-auto">
                     <div class="row">
                         <div class="col-sm-3">
                             <p class="mb-0">ID</p>
@@ -68,6 +67,17 @@
                             <p class="text-muted mb-0" th:text="${item.boxId()}"></p>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                data-bs-target="#delete-box-modal">
+                            Remover Caixa
+                        </button>
+                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
+                                data-bs-target="#update-box-modal">
+                            Editar
+                        </button>
+                    </div>
                 </div>
                 <div class="col-6">
                     <table class="table table-hover table-sm text-center">
@@ -97,6 +107,5 @@
                     </table>
                 </div>
             </div>
-        </div>
 </body>
 </html>
