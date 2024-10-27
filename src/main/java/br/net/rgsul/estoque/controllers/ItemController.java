@@ -23,6 +23,7 @@ public class ItemController {
     public String getItem(@PathVariable int id, Model model) {
         model.addAttribute("item", itemService.getItem(id));
         model.addAttribute("movements", itemService.getItemMovements(id));
+        model.addAttribute("itemStatus", ItemStatus.values());
         return "views/item/item";
     }
 

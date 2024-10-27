@@ -75,10 +75,9 @@
 
         outBoxCheck.addEventListener('change', function (){
             if (outBoxCheck.checked){
-                boxId.value = 0;
+                boxId.value = "";
                 boxId.disabled = true;
             } else {
-                boxId.value = "";
                 boxId.disabled = false;
             }
         })
@@ -101,11 +100,10 @@
 
         moveItemForm.addEventListener('submit', async function (ev){
             ev.preventDefault();
-            console.log('SUBMIT')
             const id = document.getElementById('item-id').value;
             const comment = document.getElementById('move-comment').value;
             const status = document.getElementById('move-status');
-            const newBox = boxId.value;
+            const newBox = outBoxCheck.checked? outBoxCheck.value : boxId.value;
             const response = await movItem(id, comment, status.options[status.selectedIndex].value, newBox);
 
             if (!response.ok){
@@ -116,7 +114,6 @@
         })
 
         async function movItem(id, comment, status, boxId) {
-            console.log('PUT');
             return await fetch(`./../../item/${id}/mov`, {
                     method: "PUT",
                     headers: {
