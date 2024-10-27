@@ -24,7 +24,7 @@ public class Item {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updated;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Box box;
 
     public Item() {
@@ -61,7 +61,7 @@ public class Item {
         this.itemStatus = movementDTO.status();
         this.comment = movementDTO.comment();
         this.box = box;
-        saved = box != null;
+        this.saved = box != null;
     }
 
     public int getId() {
