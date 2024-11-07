@@ -1,6 +1,8 @@
 package br.net.rgsul.estoque.controllers;
 
+import br.net.rgsul.estoque.dto.BoxCheckDTO;
 import br.net.rgsul.estoque.dto.BoxDTO;
+import br.net.rgsul.estoque.dto.GetBoxCheckDTO;
 import br.net.rgsul.estoque.dto.GetBoxDTO;
 import br.net.rgsul.estoque.entities.BoxStatus;
 import br.net.rgsul.estoque.entities.ItemStatus;
@@ -39,6 +41,11 @@ public class BoxController {
     public String create(BoxDTO boxDTO){
         boxService.save(boxDTO);
         return "redirect:/box/" + boxDTO.id();
+    }
+
+    @PostMapping("{id}/check")
+    public ResponseEntity<GetBoxCheckDTO> check(@PathVariable Integer id, @RequestBody BoxCheckDTO boxCheckDTO){
+        return ResponseEntity.ok(boxService.boxCheck(id, boxCheckDTO));
     }
 
     @PutMapping("{id}")

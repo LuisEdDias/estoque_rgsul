@@ -1,15 +1,11 @@
 package br.net.rgsul.estoque.services;
 
-import br.net.rgsul.estoque.dto.BoxDTO;
-import br.net.rgsul.estoque.dto.GetBoxDTO;
-import br.net.rgsul.estoque.dto.GetItemDTO;
+import br.net.rgsul.estoque.dto.*;
 import br.net.rgsul.estoque.entities.Box;
 import br.net.rgsul.estoque.repositories.BoxRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BoxService {
@@ -61,5 +57,23 @@ public class BoxService {
             return itemService.getAllByBox(box.get());
         }
         throw new NoSuchElementException("Box not found");
+    }
+
+    public GetBoxCheckDTO boxCheck(int id, BoxCheckDTO boxCheckDTO) {
+        HashMap<Integer, GetItemDTO> itemsMap = new HashMap<>();
+        List<Integer> unboxedItems = new ArrayList<>();
+
+        for (GetItemDTO getItemDTO : findAllItems(id)) {
+            itemsMap.put(getItemDTO.id(), getItemDTO);
+        }
+
+        boxCheckDTO.ids().forEach(item ->{
+            GetItemDTO aux = itemsMap.remove(item);
+            if (aux == null){
+                unboxedItems.add(item);
+            }
+        });
+
+        return new GetBoxCheckDTO(itemsMap.values().stream().toList(), unboxedItems);
     }
 }

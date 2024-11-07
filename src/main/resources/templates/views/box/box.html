@@ -33,6 +33,10 @@
                                         data-bs-target="#update-box-modal">
                                     Editar
                                 </button>
+                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                        data-bs-target="#check-box-modal">
+                                    Conferir
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -161,6 +165,9 @@
 
                 <!-- Add Items By File Modal -->
                 <div th:replace="~{views/fragments/add-items-by-file}"></div>
+
+                <!--Check Box Modal-->
+                <div th:replace="~{views/fragments/check-box-modal}"></div>
 
                 <!-- Update Box Modal -->
                 <div th:replace="~{views/fragments/update-box-modal}"></div>
