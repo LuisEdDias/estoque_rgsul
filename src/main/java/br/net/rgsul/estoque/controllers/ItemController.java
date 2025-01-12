@@ -2,6 +2,7 @@ package br.net.rgsul.estoque.controllers;
 
 import br.net.rgsul.estoque.dto.*;
 import br.net.rgsul.estoque.entities.ItemStatus;
+import br.net.rgsul.estoque.entities.Warehouse;
 import br.net.rgsul.estoque.services.ItemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,13 +25,17 @@ public class ItemController {
         model.addAttribute("item", itemService.getItem(id));
         model.addAttribute("movements", itemService.getItemMovements(id));
         model.addAttribute("itemStatus", ItemStatus.values());
+        model.addAttribute("warehouse", Warehouse.values());
         return "views/item/item";
     }
 
-    @GetMapping
-    public String getAll(Model model) {
-        model.addAttribute("items", itemService.getAll());
+    @GetMapping("/estoque/{warehouse}")
+    public String index(Model model, @PathVariable String warehouse) {
+        Warehouse wh = Warehouse.valueOf(warehouse.toUpperCase());
+        model.addAttribute("currentWarehouse", wh);
+        model.addAttribute("items", itemService.getAllByWarehouse(wh));
         model.addAttribute("itemStatus", ItemStatus.values());
+        model.addAttribute("warehouse", Warehouse.values());
         return "views/item/index";
     }
 
@@ -49,9 +54,14 @@ public class ItemController {
         return ResponseEntity.ok(itemService.updateItem(id, updateItemDTO));
     }
 
-    @PutMapping("{id}/mov")
+    @PutMapping("{id}/move")
     public ResponseEntity<GetItemDTO> movItem(@PathVariable int id, @RequestBody MovementDTO movementDTO) {
         return ResponseEntity.ok(itemService.movItem(id, movementDTO));
+    }
+
+    @PutMapping("move-all")
+    public ResponseEntity<List<GetItemDTO>> movItems(@RequestBody MoveAllDTO moveAllDTO) {
+        return ResponseEntity.ok(itemService.movItems(moveAllDTO));
     }
 
     @DeleteMapping("{id}")

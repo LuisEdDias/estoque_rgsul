@@ -59,10 +59,12 @@ public class Item {
         this.updated = new Timestamp(System.currentTimeMillis());
     }
 
-    public void move(MovementDTO movementDTO, Box box) {
+    public void move(ItemStatus status, String comment, Box box) {
         this.updated = new Timestamp(System.currentTimeMillis());
-        this.itemStatus = movementDTO.status();
-        this.comment = movementDTO.comment();
+        if (status != null){
+            this.itemStatus = status;
+        }
+        this.comment = comment;
         this.box = box;
         this.saved = box != null;
     }

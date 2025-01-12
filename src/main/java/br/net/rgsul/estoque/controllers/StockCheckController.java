@@ -38,7 +38,7 @@ public class StockCheckController {
 
     @PostMapping
     public String execute(@ModelAttribute StockCheckDTO stockCheckDTO) {
-        List<Item> items = itemRepository.findAllBySaved(true);
+        List<Item> items = itemRepository.findAllByBox_Warehouse(stockCheckDTO.warehouse());
         stockCheckService.stockCheck(stockCheckDTO, items);
         return "views/completed";
     }

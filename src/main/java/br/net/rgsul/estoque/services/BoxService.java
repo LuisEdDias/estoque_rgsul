@@ -45,6 +45,16 @@ public class BoxService {
         throw new NoSuchElementException();
     }
 
+    public GetBoxDTO move(Integer id, WarehouseDTO warehouseDTO) {
+        Optional<Box> box = boxRepository.findById(id);
+        if (box.isPresent()) {
+            Box boxAux = box.get();
+            boxAux.move(warehouseDTO);
+            return new GetBoxDTO(boxRepository.save(boxAux));
+        }
+        throw new NoSuchElementException();
+    }
+
     public void delete(int id) {
         Box box = boxRepository.findById(id).orElseThrow(NoSuchElementException::new);
         itemService.removeItemFromBox(box);

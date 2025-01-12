@@ -14,23 +14,65 @@
         <div class="list-group align-middle mb-0 bg-white" th:hidden="${boxes == null || boxes.isEmpty()}">
             <table class="table table-hover table-sm text-center align-middle">
                 <thead class="sticky-top">
-                <tr class="table-secondary">
-                    <th scope="col" class="col-3">Nome</th>
-                    <th scope="col" class="col-1">Número</th>
-                    <th scope="col" class="col-2">Status</th>
-                    <th scope="col" class="col-2">Atualizado</th>
+                <tr class="table-secondary" id="table-input">
+                    <th scope="col" class="col-1">
+                        <div class="form-outline" data-mdb-input-init>
+                            <input type="text" class="form-control bg-white" id="search-box-id" placeholder="NÚMERO">
+                            <label class="form-label" for="search-box-id">Número</label>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-3">
+                        <div class="form-outline" data-mdb-input-init>
+                            <input type="text" class="form-control bg-white" id="search-box-name" placeholder="NOME">
+                            <label class="form-label" for="search-box-name">Nome</label>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-2">
+                        <div class="form-outline" data-mdb-input-init>
+                            <label class="visually-hidden" for="select-status"></label>
+                            <select class="form-select" id="select-status" data-mdb-select-init>
+                                <option selected>Status</option>
+
+                                <option th:each="stt : ${boxStatus}"
+                                        th:value="${stt}"
+                                        th:text="${stt.nameStr}">
+                                </option>
+                            </select>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-2">
+                        <div class="form-outline" data-mdb-input-init>
+                            <input type="text" class="form-control bg-white" id="search-updated"
+                                   placeholder="dd/mm/aaaa" maxlength="10">
+                            <label class="form-label" for="search-updated">Atualizado</label>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-2">
+                        <div class="form-outline" data-mdb-input-init>
+                            <label class="visually-hidden" for="select-warehouse"></label>
+                            <select class="form-select" id="select-warehouse" data-mdb-select-init>
+                                <option selected>Estoque</option>
+
+                                <option th:each="opt : ${warehouse}"
+                                        th:value="${opt}"
+                                        th:text="${opt.nameStr}">
+                                </option>
+                            </select>
+                        </div>
+                    </th>
                     <th scope="col" class="col-1"></th>
                 </tr>
                 </thead>
                 <tbody class="table-hover" th:each="box : ${boxes}">
-                <tr>
-                    <td th:text="${box.name()}"></td>
-                    <td th:text="${box.id()}"></td>
-                    <td th:text="${box.status()}"></td>
-                    <td th:text="${box.updated()}"></td>
+                <tr class="table-item-row">
+                    <td class="box-id fw-medium" th:text="${box.id()}"></td>
+                    <td class="name text-start fw-medium" th:text="${box.name()}"></td>
+                    <td class="status" th:text="${box.status()}"></td>
+                    <td class="updated" th:text="${box.updated()}"></td>
+                    <td class="warehouse" th:text="${box.warehouse()}"></td>
                     <td>
-                        <button type="button" class="btn btn-outline-primary w-75 my-1">
-                            <a th:href="@{'box/' + ${box.id()}}">Ver</a>
+                        <button type="button" class="btn btn-outline-primary w-75 my-1 p-0">
+                            <a class="d-block py-2" th:href="@{'box/' + ${box.id()}}">Ver</a>
                         </button>
                     </td>
                 </tr>
@@ -52,6 +94,9 @@
 
     <!--New Box Modal-->
     <div th:replace="~{views/fragments/new-box-modal}"></div>
+
+    <!-- Box Filter Script -->
+    <script th:replace="~{views/fragments/box-list-filter}"></script>
 </div>
 </body>
 </html>

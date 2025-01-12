@@ -14,14 +14,10 @@
         <div class="align-middle mb-0 bg-white" th:hidden="${items == null || items.isEmpty()}">
             <table class="table table-hover table-sm text-center">
                 <thead class="sticky-top">
+                <tr class="table-secondary">
+                    <th colspan="6" class="text-center fs-3" th:text="'Estoque ' + ${currentWarehouse.nameStr}"></th>
+                </tr>
                 <tr class="table-secondary" id="table-input">
-                    <th scope="col">
-                        <div class="form-check">
-                            <label>
-                                <input class="form-check-input" type="checkbox" id="select-all"/>
-                            </label>
-                        </div>
-                    </th>
                     <th scope="col" class="col-1">
                         <div class="form-outline" data-mdb-input-init>
                             <input type="text" class="form-control bg-white" id="search-item-id" placeholder="ID">
@@ -66,14 +62,6 @@
                 </thead>
                 <tbody th:each="item : ${items}">
                 <tr class="table-item-row">
-                    <td>
-                        <div class="form-check">
-                            <label>
-                                <input class="form-check-input item-checkbox" type="checkbox" th:value="${item.id()}"
-                                       th:id="${item.id()}"/>
-                            </label>
-                        </div>
-                    </td>
                     <td class="item-id text-start fw-medium" th:text="${item.id()}"></td>
                     <td class="item text-start fw-medium">
                         <a class="d-block w-100 h-100 text-reset" th:href="@{'item/' + ${item.id()}}"
@@ -81,7 +69,10 @@
                     </td>
                     <td class="updated" th:text="${item.updated()}"></td>
                     <td class="status" th:text="${item.status()}"></td>
-                    <td class="box-id" th:text="${item.boxId()}"></td>
+                    <td class="box-id">
+                        <a class="d-block w-100 h-100 text-reset" th:text="${item.boxId()}"
+                           th:href="@{'box/' + ${item.boxId()}}"></a>
+                    </td>
                     <td>
                         <button type="button" data-bs-toggle="modal" data-bs-target="#move-item-modal"
                                 th:attr="data-id=${item.id()},data-status=${item.status()}"
@@ -97,16 +88,16 @@
         <div class="container" th:hidden="${!items.isEmpty()}">
             <h3 class="row fs-5 py-4 justify-content-center">Não existem itens cadastrados!</h3>
         </div>
-
-        <!--Move Item Modal-->
-        <div th:replace="~{views/fragments/move-item-modal}"></div>
     </div>
+
+    <!--Move All Items Modal-->
+    <div th:replace="~{views/fragments/move-all-item-modal}"></div>
+
+    <!--Move Item Modal-->
+    <div th:replace="~{views/fragments/move-item-modal}"></div>
 
     <!-- Items Filter Script -->
     <script th:replace="~{views/fragments/item-list-filter}"></script>
-
-    <!-- Move All Selected Items Script -->
-    <script th:replace="~{views/fragments/move-all-script}"></script>
 </div>
 </body>
 </html>

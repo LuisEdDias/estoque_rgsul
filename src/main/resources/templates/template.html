@@ -41,9 +41,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/box">Todas as Caixas</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/item">Todos os Itens</a>
-                </li>
             </ul>
             <form class="d-flex mt-3" role="search" id="search-box-form">
                 <input class="form-control me-2" id="search-box-input" type="search" placeholder="Número da Caixa" aria-label="Search">
@@ -52,6 +49,19 @@
             <form class="d-flex mt-3" role="search" id="search-item-form">
                 <input class="form-control me-2" id="search-item-input" type="search" placeholder="ID" aria-label="Search">
                 <button class="btn btn-success" type="submit">Buscar Item</button>
+            </form>
+            <form class="d-flex mt-3" role="search" id="all-items-form">
+                <div class="input-group">
+                    <select class="custom-select form-control h-100 w-100" name="warehouse"
+                            id="all-items-by-warehouse" aria-label="warehouse" required>
+                        <option disabled selected>Selecionar Estoque</option>
+                        <option th:each="opt : ${warehouse}"
+                                th:value="${opt}"
+                                th:text="${opt.nameStr}">
+                        </option>
+                    </select>
+                    <button class="btn btn-primary" type="submit">Buscar por Estoque</button>
+                </div>
             </form>
         </div>
     </div>
@@ -117,6 +127,20 @@
             alert("Item não encontrado!");
         } else {
             window.location.assign(`/item/${searchItemInput}`);
+        }
+    })
+
+    const allItemsByWarehouse = document.getElementById('all-items-form');
+
+    allItemsByWarehouse.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        const itemsWarehouseSelect = document.getElementById('all-items-by-warehouse');
+        const warehouseSelected = itemsWarehouseSelect.options[itemsWarehouseSelect.selectedIndex];
+
+        if (warehouseSelected.disabled) {
+            alert("Selecione um estoque!")
+        } else {
+            window.location.assign(`/item/estoque/${warehouseSelected.value}`);
         }
     })
 </script>

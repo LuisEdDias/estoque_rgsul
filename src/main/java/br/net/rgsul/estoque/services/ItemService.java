@@ -4,6 +4,7 @@ import br.net.rgsul.estoque.dto.*;
 import br.net.rgsul.estoque.entities.Box;
 import br.net.rgsul.estoque.entities.Item;
 import br.net.rgsul.estoque.entities.Movement;
+import br.net.rgsul.estoque.entities.Warehouse;
 import br.net.rgsul.estoque.repositories.BoxRepository;
 import br.net.rgsul.estoque.repositories.ItemRepository;
 import br.net.rgsul.estoque.repositories.MovementRepository;
@@ -44,6 +45,11 @@ public class ItemService {
 
     public List<GetItemDTO> getAll() {
         List<Item> items = itemRepository.findAllBySaved(true);
+        return items.stream().map(GetItemDTO::new).toList();
+    }
+
+    public List<GetItemDTO> getAllByWarehouse(Warehouse warehouse) {
+        List<Item> items = itemRepository.findAllByBox_Warehouse(warehouse);
         return items.stream().map(GetItemDTO::new).toList();
     }
 
@@ -99,6 +105,7 @@ public class ItemService {
         return new GetItemDTO(itemRepository.save(item));
     }
 
+    @Transactional
     public GetItemDTO movItem(int id, MovementDTO movementDTO) {
         Item item = itemRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("Item not found")
@@ -112,7 +119,7 @@ public class ItemService {
             );
         }
 
-        item.move(movementDTO, newBox);
+        item.move(movementDTO.status(), movementDTO.comment(), newBox);
         movementRepository.save(new Movement(item));
 
         if (oldBox != null){
@@ -126,6 +133,62 @@ public class ItemService {
         }
 
         return new GetItemDTO(itemRepository.save(item));
+    }
+
+    @Transactional
+    public List<GetItemDTO> movItems(MoveAllDTO moveAllDTO) {
+        // Busca todos os itens pelos IDs fornecidos
+        List<Item> items = itemRepository.findAllByIdIn(moveAllDTO.ids());
+
+        if (items.size() != moveAllDTO.ids().size()) {
+            throw new NoSuchElementException("Some items were not found");
+        }
+
+        // Determinação da nova caixa (uma única busca no banco)
+        Box newBox = null;
+
+        if (moveAllDTO.boxId() != 0){
+            newBox = boxRepository.findById(moveAllDTO.boxId()).orElseThrow(
+                    () -> new NoSuchElementException("Box not found")
+            );
+        }
+
+        // Movimentação dos itens e registro das movimentações
+        List<Movement> movements = new ArrayList<>();
+        List<Box> boxesToUpdate = new ArrayList<>();
+
+        for (Item item : items) {
+            Box oldBox = item.getBox();
+
+            // Movimenta o item
+            item.move(null, moveAllDTO.comment(), newBox);
+
+            // Cria o registro de movimentação
+            movements.add(new Movement(item));
+
+            // Adiciona as caixas para atualização, evitando duplicatas
+            if (oldBox != null && !boxesToUpdate.contains(oldBox)) {
+                boxesToUpdate.add(oldBox);
+            }
+            if (newBox != null && !boxesToUpdate.contains(newBox)) {
+                boxesToUpdate.add(newBox);
+            }
+        }
+
+        // Salva as movimentações em lote
+        movementRepository.saveAll(movements);
+
+        // Atualiza as caixas
+        for (Box box : boxesToUpdate) {
+            box.setUpdated();
+            boxRepository.save(box);
+        }
+
+        // Salva os itens atualizados e converte para DTOs
+        List<Item> updatedItems = itemRepository.saveAll(items);
+        return updatedItems.stream()
+                .map(GetItemDTO::new)
+                .toList();
     }
 
     @Transactional

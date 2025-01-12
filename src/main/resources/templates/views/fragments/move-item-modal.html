@@ -114,7 +114,11 @@
         })
 
         async function movItem(id, comment, status, boxId) {
-            return await fetch(`./../../item/${id}/mov`, {
+            console.log(id);
+            console.log(comment);
+            console.log(status);
+            console.log(boxId);
+            return await fetch(`./../../item/${id}/move`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"

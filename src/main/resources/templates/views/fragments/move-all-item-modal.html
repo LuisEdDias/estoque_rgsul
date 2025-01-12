@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mover Items</title>
+</head>
+<body>
+
+<div th:fragment="move-all-item-modal" class="modal fade" id="move-all-items-modal" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Mover Item</h1>
+                <button type="button" class="btn-close" id="close-move-all-items-modal" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="container" id="move-all-items-form">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-9 pb-4 d-flex flex-column justify-content-between">
+                            <div data-mdb-input-init class="form-outline">
+                                <input name="boxId" type="text" class="form-control fs-4" id="move-all-box-id"/>
+                                <label class="form-label" for="move-all-box-id">Caixa</label>
+                            </div>
+
+                            <div data-mdb-input-init class="form-outline">
+                                <input id="move-all-out-box" class="form-check-input" type="checkbox" value="0">
+                                <label for="move-all-out-box">Remover da caixa</label>
+                            </div>
+                        </div>
+                        <div class="d-lg-flex col-lg-9 justify-content-lg-between">
+                            <div data-mdb-input-init class="form-outline">
+                                <textarea name="comment" class="form-control fs-4" id="move-all-comment"
+                                          rows="1"></textarea>
+                                <label for="move-all-comment" class="form-label">Comentário</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="close-move-all-items-modal2"
+                                data-bs-dismiss="modal">Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="move-all-items">Mover</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const moveAllItemsModalClose = document.getElementById('close-move-all-items-modal');
+        const moveAllItemsModalClose2 = document.getElementById('close-move-all-items-modal2');
+        const moveAllItemsForm = document.getElementById('move-all-items-form');
+        const outBoxCheck2 = document.getElementById('move-all-out-box');
+        const boxId2 = document.getElementById('move-all-box-id');
+
+        outBoxCheck2.addEventListener('change', function () {
+            if (outBoxCheck2.checked) {
+                boxId2.value = "";
+                boxId2.disabled = true;
+            } else {
+                boxId2.disabled = false;
+            }
+        })
+
+        moveAllItemsModalClose.addEventListener('click', function () {
+            window.location.reload();
+        });
+
+        moveAllItemsModalClose2.addEventListener('click', function () {
+            window.location.reload();
+        });
+
+        moveAllItemsForm.addEventListener('submit', async function (ev) {
+            ev.preventDefault();
+            const idsList = getAllItemsChecked();
+            const comment = document.getElementById('move-all-comment').value;
+            const newBox = outBoxCheck2.checked ? outBoxCheck2.value : boxId2.value;
+
+            if (idsList.length === 0) {
+                alert("Nenhum item foi selecionado!");
+            } else {
+                const response = await movAllItems(idsList, comment, newBox);
+
+                if (!response.ok) {
+                    alert("Caixa não encontrada!")
+                } else {
+                    window.location.reload();
+                }
+            }
+        })
+
+        async function movAllItems(ids, comment, boxId) {
+            return await fetch(`./../../item/move-all`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        ids: ids,
+                        comment: comment,
+                        boxId: boxId
+                    })
+                }
+            );
+        }
+
+        function getAllItemsChecked(){
+            const ids = [];
+            const itemRows = Array.from(document.getElementsByClassName('table-item-row'));
+
+            itemRows.forEach(row => {
+                if (row.querySelector('.item-checkbox').checked) {
+                    ids.push(row.querySelector('.item-id').textContent);
+                }
+            });
+            console.log(ids);
+            return ids;
+        }
+    </script>
+</div>
+</body>
+</html>

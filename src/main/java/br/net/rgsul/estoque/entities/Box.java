@@ -1,10 +1,10 @@
 package br.net.rgsul.estoque.entities;
 
 import br.net.rgsul.estoque.dto.BoxDTO;
+import br.net.rgsul.estoque.dto.WarehouseDTO;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "boxes")
@@ -18,6 +18,7 @@ public class Box {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp updated;
     private BoxStatus status;
+    private Warehouse warehouse;
 
     public Box() {}
 
@@ -27,6 +28,7 @@ public class Box {
         this.description = boxDTO.description();
         this.updated = new Timestamp(System.currentTimeMillis());
         this.status = boxDTO.status();
+        this.warehouse = boxDTO.warehouse();
     }
 
     public void update(BoxDTO boxDTO) {
@@ -34,6 +36,10 @@ public class Box {
         this.description = boxDTO.description();
         this.updated = new Timestamp(System.currentTimeMillis());
         this.status = boxDTO.status();
+    }
+
+    public void move(WarehouseDTO warehouseDTO) {
+        this.warehouse = warehouseDTO.warehouse();
     }
 
     public void setUpdated(){
@@ -58,5 +64,9 @@ public class Box {
 
     public BoxStatus getStatus() {
         return status;
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
     }
 }

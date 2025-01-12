@@ -16,7 +16,7 @@
                 <p class="mb-0">ID</p>
             </div>
             <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${item.id()}"></p>
+                <p class="text-muted fw-medium mb-0" th:text="${item.id()}"></p>
             </div>
         </div>
 
@@ -28,7 +28,7 @@
             </div>
 
             <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${item.name()}"></p>
+                <p class="text-muted fw-medium mb-0" th:text="${item.name()}"></p>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
             </div>
 
             <div class="col-sm-9">
-                <p id="itemStatus" class="text-muted mb-0" th:text="${item.status()}"></p>
+                <p id="itemStatus" class="text-muted fw-medium mb-0" th:text="${item.status()}"></p>
             </div>
         </div>
 
@@ -52,7 +52,7 @@
             </div>
 
             <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${item.comment()}"></p>
+                <p class="text-muted fw-medium mb-0" th:text="${item.comment()}"></p>
             </div>
         </div>
 
@@ -64,7 +64,7 @@
             </div>
 
             <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${item.updated()}"></p>
+                <p class="text-muted fw-medium mb-0" th:text="${item.updated()}"></p>
             </div>
         </div>
 
@@ -75,8 +75,21 @@
                 <p class="mb-0">Caixa</p>
             </div>
 
+            <div class="col-sm-9 d-flex">
+                <a class="text-muted fw-medium mb-0 w-25" th:href="@{'./../box/' + ${item.boxId()}}"
+                   th:text="${item.boxId()}"></a>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <p class="mb-0">Estoque</p>
+            </div>
+
             <div class="col-sm-9">
-                <p class="text-muted mb-0" th:text="${item.boxId()}"></p>
+                <p class="text-muted fw-medium mb-0" th:text="${item.warehouse()}"></p>
             </div>
         </div>
 

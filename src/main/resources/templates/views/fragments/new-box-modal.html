@@ -50,6 +50,21 @@
                                 </div>
                             </div>
 
+                            <div class="col-lg-9 d-flex pb-4">
+                                <label class="visually-hidden" for="warehouse">Estoque</label>
+                                <div class="input-group">
+                                    <div class="input-group-text">ESTOQUE</div>
+                                    <select class="custom-select h-100 w-100" name="warehouse" id="warehouse" required>
+                                        <option disabled selected>Selecionar</option>
+
+                                        <option th:each="opt : ${warehouse}"
+                                                th:value="${opt}"
+                                                th:text="${opt.nameStr}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="col-lg-9 pb-4">
                                 <div data-mdb-input-init class="form-outline">
                                     <textarea name="description" class="form-control fs-4" id="description"></textarea>

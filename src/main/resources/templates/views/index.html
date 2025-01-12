@@ -28,23 +28,31 @@
             <div class="card rounded-3 justify-content-center align-items-center bg-secondary">
                 <img src="https://media.licdn.com/dms/image/D4D3DAQHipi98N7U3Kg/image-scale_191_1128/0/1661370159038/rg_sul_internet_cover?e=2147483647&v=beta&t=KfgNSvDaBwYBTfn1p5G9rPULhVzKyty0HihfYX7CFaY"
                      class="w-100 rounded-top" alt="Sample photo">
-                <div class="card-body d-flex col-9 justify-content-center">
+                <div class="card-body d-flex col-10 justify-content-center">
                     <div class="card w-75 text-center">
                         <div class="card-header fw-bold fs-4">Verificação de Estoque</div>
                         <div class="card-body">
                             <form class="row align-items-center" method="post" action="check"
                                   enctype="multipart/form-data">
                                 <div class="input-group mb-3">
-                                    <input class="form-control me-2" type="file" id="principal" name="principal">
-                                    <button type="submit" class="btn btn-success">
-                                        Executar
-                                    </button>
+                                    <input class="form-control" type="file" id="principal" name="principal" required>
+                                </div>
+                                <div class="input-group">
+                                    <select class="custom-select form-control h-100 w-100" name="warehouse"
+                                            id="check-warehouse" aria-label="warehouse" required>
+                                        <option disabled selected>Selecionar Estoque</option>
+                                        <option th:each="opt : ${warehouse}"
+                                                th:value="${opt}"
+                                                th:text="${opt.nameStr}">
+                                        </option>
+                                    </select>
+                                    <button class="btn btn-primary" type="submit">Executar</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div class="card-body d-flex col-9 justify-content-center">
+                <div class="card-body d-flex col-10 justify-content-center">
                     <div class="card w-75 text-center">
                         <div class="card-header fw-bold fs-4">Caixas</div>
                         <div class="card-body">
@@ -59,26 +67,40 @@
                                     </button>
                                 </div>
                                 <form class="d-flex mt-3" role="search" id="search-box-form">
-                                    <input class="form-control me-2" id="search-box-input" type="search"
-                                           placeholder="Número da Caixa" aria-label="Search">
-                                    <button class="btn btn-success" type="submit">Buscar Caixa</button>
+                                    <div class="input-group">
+                                        <input class="form-control" id="search-box-input" type="search"
+                                               placeholder="Número da Caixa" aria-label="Search" required>
+                                        <button class="btn btn-success" type="submit">Buscar Caixa</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-body d-flex col-9 justify-content-center">
+                <div class="card-body d-flex col-10 justify-content-center">
                     <div class="card w-75 text-center">
                         <div class="card-header fw-bold fs-4">Itens</div>
                         <div class="card-body">
-                            <div class="d-flex align-content-between justify-content-between">
-                                <button type="button" class="btn btn-primary btn-lg col-5">
-                                    <a class="nav-link" href="/item">Todos os Itens</a>
-                                </button>
+                            <div class="d-flex align-content-between justify-content-between gap-4">
+                                <form class="d-flex col" role="search" id="all-items-form">
+                                    <div class="input-group">
+                                        <select class="custom-select form-control h-100 w-100" name="warehouse"
+                                                id="all-items-by-warehouse" aria-label="warehouse" required>
+                                            <option disabled selected>Selecionar Estoque</option>
+                                            <option th:each="opt : ${warehouse}"
+                                                    th:value="${opt}"
+                                                    th:text="${opt.nameStr}">
+                                            </option>
+                                        </select>
+                                        <button class="btn btn-primary" type="submit">Buscar por Estoque</button>
+                                    </div>
+                                </form>
                                 <form class="d-flex col-5" role="search" id="search-item-form">
-                                    <input class="form-control me-2" id="search-item-input" type="search"
-                                           placeholder="ID" aria-label="Search"/>
-                                    <button class="btn btn-success" type="submit">Buscar Item</button>
+                                    <div class="input-group">
+                                        <input class="form-control h-100" id="search-item-input" type="search"
+                                               placeholder="ID" aria-label="Search" required/>
+                                        <button class="btn btn-success" type="submit">Buscar por ID</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -103,8 +125,9 @@
         </div>
     </div>
 
-    <div class="row text-center fs-5 p-3 bg-primary">
-        <p>Análise e desenvolvimeto de sistemas - UCPel 2024</p>
+    <div class="row text-center p-3 bg-primary">
+        <p class="fs-5 mb-1">Luís Eduardo Dias</p>
+        <p class="p-0 m-0">Análise e desenvolvimeto de sistemas - UCPel 2025</p>
     </div>
 </footer>
 
@@ -114,6 +137,7 @@
 <script>
     const searchBoxForm = document.getElementById('search-box-form');
     const searchItemForm = document.getElementById('search-item-form');
+    const allItemsByWarehouse = document.getElementById('all-items-form');
 
     searchBoxForm.addEventListener('submit', async function (ev) {
         ev.preventDefault();
@@ -140,6 +164,18 @@
             alert("Item não encontrado!");
         } else {
             window.location.assign(`/item/${searchItemInput}`);
+        }
+    })
+
+    allItemsByWarehouse.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        const itemsWarehouseSelect = document.getElementById('all-items-by-warehouse');
+        const warehouseSelected = itemsWarehouseSelect.options[itemsWarehouseSelect.selectedIndex];
+
+        if (warehouseSelected.disabled) {
+            alert("Selecione um estoque!")
+        } else {
+            window.location.assign(`/item/estoque/${warehouseSelected.value}`);
         }
     })
 </script>

@@ -5,7 +5,7 @@
     <title></title>
 </head>
 <body>
-<script th:fragment="item-list-filter">
+<script th:fragment="box-list-filter">
     const tableInput = document.getElementById('table-input');
     const itemRows = Array.from(document.getElementsByClassName('table-item-row'));
 
@@ -28,25 +28,25 @@
     }
 
     function filter() {
-        const itemIdSearch = getInputValue('search-item-id');
-        const itemSearch = getInputValue('search-item').toLowerCase();
+        const itemBoxSearch = getInputValue('search-box-id');
+        const boxSearch = getInputValue('search-box-name').toLowerCase();
         const updatedSearch = getInputValue('search-updated');
         const selectStatus = document.getElementById('select-status').selectedOptions.item(0).textContent;
-        const boxIdSearch = document.getElementById('search-box-id');
+        const warehouseSearch = document.getElementById('select-warehouse').selectedOptions.item(0).textContent;
 
         itemRows.forEach(row => {
-            const itemId = row.querySelector('.item-id').textContent;
-            const itemName = row.querySelector('.item').textContent.toLowerCase();
+            const itemId = row.querySelector('.box-id').textContent;
+            const itemName = row.querySelector('.name').textContent.toLowerCase();
             const updated = row.querySelector('.updated').textContent.substring(0, 10);
             const status = row.querySelector('.status').textContent;
-            const boxId = row.querySelector('.box-id')?.textContent || '';
+            const warehouse = row.querySelector('.warehouse').textContent;
 
             const matches =
-                itemId.includes(itemIdSearch) &&
-                itemName.includes(itemSearch.toLowerCase()) &&
+                itemId.includes(itemBoxSearch) &&
+                itemName.includes(boxSearch.toLowerCase()) &&
                 updated.includes(updatedSearch) &&
                 (selectStatus === 'Status' || selectStatus === status) &&
-                (!boxIdSearch || boxId.includes(boxIdSearch.value));
+                (warehouseSearch === 'Estoque' || warehouseSearch === warehouse);
 
             row.style.display = matches ? "" : "none";
         });

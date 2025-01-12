@@ -4,7 +4,7 @@ import br.net.rgsul.estoque.entities.Item;
 
 import java.time.format.DateTimeFormatter;
 
-public record GetItemDTO(int id, String name, String comment, String status, String saved, String updated, int boxId) {
+public record GetItemDTO(int id, String name, String comment, String status, String saved, String updated, int boxId, String warehouse) {
     public GetItemDTO(Item item){
         this(
                 item.getId(),
@@ -13,7 +13,8 @@ public record GetItemDTO(int id, String name, String comment, String status, Str
                 item.getStatus().nameStr,
                 item.isSaved()? "NA CAIXA" : "NA RUA",
                 item.getUpdated().toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
-                item.getBox() == null? 0 : item.getBox().getId()
+                item.getBox() == null? 0 : item.getBox().getId(),
+                item.getBox().getWarehouse().nameStr
         );
     }
 }

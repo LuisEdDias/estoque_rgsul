@@ -16,8 +16,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <p class="fs-2">Tem certeza que deseja deletar a caixa <i th:text="${box.id()}" class="fw-bold"></i>
-                    </p>
+                    <p class="fs-2" th:text="'Tem certeza que deseja deletar a caixa ' + ${box.id()} + ' ?'"></p>
+                    <p class="fs-2 fw-bold">ESSA AÇÃO NÃO PODERÁ SER DESFEITA</p>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger" id="delete-box"><a>Deletar</a></button>

@@ -13,13 +13,14 @@
     <div class="row align-items-center justify-content-center">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col col-xl-10">
+                <div class="col col-xxl-10">
                     <div class="card mb-5 rounded-9 border-black border">
                         <div class="card-body p-4">
-                            <h3 class="mb-3">Caixa <i th:text="${box.id()}"></i> : <i th:text="${box.name()}"></i></h3>
+                            <h2 class="mb-3 fw-bold" th:text="'Caixa ' + ${box.id()} + ' : ' + ${box.name()}"></h2>
+                            <h3 th:text="'Estoque: ' + ${box.warehouse()}"></h3>
                             <p class="mb-0" th:text="${box.description()}"></p>
                             <hr class="my-4">
-                            <div class="d-flex justify-content-start align-items-center gap-5">
+                            <div class="d-flex justify-content-between justify-content-xxl-start align-items-center gap-3">
                                 <p class="mb-0 fw-bold text-muted">Total de Itens: <i class="text-black"
                                                                                       th:text="${items.size()}"></i></p>
                                 <p class="mb-0 fw-bold text-muted">Status: <i class="text-black"
@@ -36,6 +37,10 @@
                                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                                         data-bs-target="#check-box-modal">
                                     Conferir
+                                </button>
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#move-box-modal"
+                                        class="btn btn-light border border-black text-dark">
+                                    Mover
                                 </button>
                             </div>
                         </div>
@@ -60,7 +65,7 @@
                                         </div>
 
                                         <div class="col-4 ps-1">
-                                            <button type="button"
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#move-all-items-modal"
                                                     class="btn btn-light btn-lg border border-black text-dark">Mover
                                                 Selecionados
                                             </button>
@@ -172,11 +177,17 @@
                 <!-- Update Box Modal -->
                 <div th:replace="~{views/fragments/update-box-modal}"></div>
 
+                <!-- Move Box Modal -->
+                <div th:replace="~{views/fragments/move-box-modal}"></div>
+
                 <!-- Delete Box Modal -->
                 <div th:replace="~{views/fragments/delete-box-modal}"></div>
 
                 <!-- Move Item Modal -->
                 <div th:replace="~{views/fragments/move-item-modal}"></div>
+
+                <!--Move All Items Modal-->
+                <div th:replace="~{views/fragments/move-all-item-modal}"></div>
 
                 <!-- Move All Selected Items Script -->
                 <script th:replace="~{views/fragments/move-all-script}"></script>

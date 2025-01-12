@@ -1,11 +1,9 @@
 package br.net.rgsul.estoque.controllers;
 
-import br.net.rgsul.estoque.dto.BoxCheckDTO;
-import br.net.rgsul.estoque.dto.BoxDTO;
-import br.net.rgsul.estoque.dto.GetBoxCheckDTO;
-import br.net.rgsul.estoque.dto.GetBoxDTO;
+import br.net.rgsul.estoque.dto.*;
 import br.net.rgsul.estoque.entities.BoxStatus;
 import br.net.rgsul.estoque.entities.ItemStatus;
+import br.net.rgsul.estoque.entities.Warehouse;
 import br.net.rgsul.estoque.services.BoxService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,6 +22,7 @@ public class BoxController {
     @GetMapping
     public String index(Model model) {
         model.addAttribute("boxStatus", BoxStatus.values());
+        model.addAttribute("warehouse", Warehouse.values());
         model.addAttribute("boxes", boxService.findAll());
         return "views/box/index";
     }
@@ -34,6 +33,7 @@ public class BoxController {
         model.addAttribute("box", boxService.getBoxById(id));
         model.addAttribute("itemStatus", ItemStatus.values());
         model.addAttribute("boxStatus", BoxStatus.values());
+        model.addAttribute("warehouse", Warehouse.values());
         return "views/box/box";
     }
 
@@ -51,6 +51,11 @@ public class BoxController {
     @PutMapping("{id}")
     public ResponseEntity<GetBoxDTO> update(@PathVariable Integer id, @RequestBody BoxDTO boxDTO){
         return ResponseEntity.ok(boxService.update(id, boxDTO));
+    }
+
+    @PutMapping("{id}/move")
+    public ResponseEntity<GetBoxDTO> move(@PathVariable Integer id, @RequestBody WarehouseDTO warehouseDTO){
+        return ResponseEntity.ok(boxService.move(id, warehouseDTO));
     }
 
     @DeleteMapping("{id}")
