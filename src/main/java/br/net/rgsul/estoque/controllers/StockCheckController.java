@@ -1,7 +1,7 @@
 package br.net.rgsul.estoque.controllers;
 
 import br.net.rgsul.estoque.dto.StockCheckDTO;
-import br.net.rgsul.estoque.entities.FileDownload;
+import br.net.rgsul.estoque.entities.StockCheckFileDownload;
 import br.net.rgsul.estoque.entities.Item;
 import br.net.rgsul.estoque.repositories.ItemRepository;
 import br.net.rgsul.estoque.services.StockCheckService;
@@ -19,6 +19,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -45,8 +47,9 @@ public class StockCheckController {
 
     @GetMapping("download")
     public ResponseEntity<Resource> getFile() throws IOException {
-        File file = FileDownload.file;
-        File fileToCheck = FileDownload.itemsToBeChecked;
+        File file = StockCheckFileDownload.file;
+        File fileToCheck = StockCheckFileDownload.itemsToBeChecked;
+        Timestamp date = new Timestamp(System.currentTimeMillis());
 
         if (file == null) {
             return ResponseEntity.notFound().build();

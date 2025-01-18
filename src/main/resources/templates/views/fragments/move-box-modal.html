@@ -74,7 +74,7 @@
                 alert("Selecione um estoque de destino!");
             } else {
                 const boxId = document.getElementById('move-box-id').value;
-                const response = await updateBox(boxId, warehouse.value);
+                const response = await moveBox(boxId, warehouse.value);
 
                 if (!response.ok) {
                     alert("Não foi possível mover a caixa!")
@@ -84,8 +84,8 @@
             }
         });
 
-        async function updateBox(id, warehouse) {
-            return await fetch("./../../box/" + id + "/move", {
+        async function moveBox(id, warehouse) {
+            return await fetch("./../../estoque-app/box/" + id + "/move", {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"

@@ -14,7 +14,7 @@ public record GetItemDTO(int id, String name, String comment, String status, Str
                 item.isSaved()? "NA CAIXA" : "NA RUA",
                 item.getUpdated().toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
                 item.getBox() == null? 0 : item.getBox().getId(),
-                item.getBox().getWarehouse().nameStr
+                item.getBox() == null? null :item.getBox().getWarehouse().nameStr
         );
     }
 }

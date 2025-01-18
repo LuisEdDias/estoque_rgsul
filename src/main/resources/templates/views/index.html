@@ -23,16 +23,16 @@
 </header>
 
 <main class="container-fluid justify-content-center my-auto">
-    <div class="row align-items-center justify-content-center px-2">
-        <div class="col-10 justify-content-center m-0 py-3 px-0">
-            <div class="card rounded-3 justify-content-center align-items-center bg-secondary">
+    <div class="row align-items-center justify-content-center px-lg-2">
+        <div class="col-lg-10 justify-content-center m-0 py-lg-3 px-0">
+            <div class="card rounded-lg-3 justify-content-center align-items-center bg-secondary">
                 <img src="https://media.licdn.com/dms/image/D4D3DAQHipi98N7U3Kg/image-scale_191_1128/0/1661370159038/rg_sul_internet_cover?e=2147483647&v=beta&t=KfgNSvDaBwYBTfn1p5G9rPULhVzKyty0HihfYX7CFaY"
-                     class="w-100 rounded-top" alt="Sample photo">
-                <div class="card-body d-flex col-10 justify-content-center">
-                    <div class="card w-75 text-center">
+                     class="w-100 rounded-lg-top" alt="Sample photo">
+                <div class="card-body d-flex col-lg-10 justify-content-center px-1 px-lg-4">
+                    <div class="card col-12 col-lg-9 text-center">
                         <div class="card-header fw-bold fs-4">Verificação de Estoque</div>
                         <div class="card-body">
-                            <form class="row align-items-center" method="post" action="check"
+                            <form class="row align-items-center" method="post" action="/estoque-app/check"
                                   enctype="multipart/form-data">
                                 <div class="input-group mb-3">
                                     <input class="form-control" type="file" id="principal" name="principal" required>
@@ -52,18 +52,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body d-flex col-10 justify-content-center">
-                    <div class="card w-75 text-center">
+                <div class="card-body d-lg-flex col-lg-10 justify-content-center px-1 px-lg-4">
+                    <div class="card col-12 col-lg-9 text-center">
                         <div class="card-header fw-bold fs-4">Caixas</div>
                         <div class="card-body">
                             <div class="row align-items-center">
-                                <div class="d-flex align-content-between justify-content-between">
-                                    <button type="button" class="btn btn-success btn-lg col-5"
+                                <div class="d-lg-flex align-content-between justify-content-between">
+                                    <button type="button" class="btn btn-success btn-lg col-12 col-lg-5 mb-3 mb-lg-0"
                                             data-bs-toggle="modal" data-bs-target="#new-box-modal">
                                         Adicionar Caixa
                                     </button>
-                                    <button type="button" class="btn btn-primary btn-lg col-5">
-                                        <a class="nav-link" href="/box">Todas as Caixas</a>
+                                    <button type="button" class="btn btn-primary btn-lg col-12 col-lg-5">
+                                        <a class="nav-link" href="/estoque-app/box">Todas as Caixas</a>
                                     </button>
                                 </div>
                                 <form class="d-flex mt-3" role="search" id="search-box-form">
@@ -77,12 +77,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body d-flex col-10 justify-content-center">
-                    <div class="card w-75 text-center">
+                <div class="card-body d-flex col-lg-10 justify-content-center px-1 px-lg-4">
+                    <div class="card col-12 col-lg-9 text-center">
                         <div class="card-header fw-bold fs-4">Itens</div>
                         <div class="card-body">
-                            <div class="d-flex align-content-between justify-content-between gap-4">
-                                <form class="d-flex col" role="search" id="all-items-form">
+                            <div class="d-lg-flex align-content-between justify-content-between gap-4">
+                                <form class="d-flex col mb-3 mb-lg-0" role="search" id="all-items-form">
                                     <div class="input-group">
                                         <select class="custom-select form-control h-100 w-100" name="warehouse"
                                                 id="all-items-by-warehouse" aria-label="warehouse" required>
@@ -95,7 +95,7 @@
                                         <button class="btn btn-primary" type="submit">Buscar por Estoque</button>
                                     </div>
                                 </form>
-                                <form class="d-flex col-5" role="search" id="search-item-form">
+                                <form class="d-flex col-lg-5" role="search" id="search-item-form">
                                     <div class="input-group">
                                         <input class="form-control h-100" id="search-item-input" type="search"
                                                placeholder="ID" aria-label="Search" required/>
@@ -142,28 +142,28 @@
     searchBoxForm.addEventListener('submit', async function (ev) {
         ev.preventDefault();
         const searchBoxInput = document.getElementById('search-box-input').value;
-        const connection = await fetch(`/box/${searchBoxInput}`, {
+        const connection = await fetch(`/estoque-app/box/${searchBoxInput}`, {
             method: "GET"
         });
 
         if (!connection.ok) {
             alert("Caixa não encontrada!");
         } else {
-            window.location.assign(`/box/${searchBoxInput}`);
+            window.location.assign(`/estoque-app/box/${searchBoxInput}`);
         }
     })
 
     searchItemForm.addEventListener('submit', async function (ev) {
         ev.preventDefault();
         const searchItemInput = document.getElementById('search-item-input').value;
-        const connection = await fetch(`/item/${searchItemInput}`, {
+        const connection = await fetch(`/estoque-app/item/${searchItemInput}`, {
             method: "GET"
         });
 
         if (!connection.ok) {
             alert("Item não encontrado!");
         } else {
-            window.location.assign(`/item/${searchItemInput}`);
+            window.location.assign(`/estoque-app/item/${searchItemInput}`);
         }
     })
 
@@ -175,7 +175,7 @@
         if (warehouseSelected.disabled) {
             alert("Selecione um estoque!")
         } else {
-            window.location.assign(`/item/estoque/${warehouseSelected.value}`);
+            window.location.assign(`/estoque-app/item/estoque/${warehouseSelected.value}`);
         }
     })
 </script>

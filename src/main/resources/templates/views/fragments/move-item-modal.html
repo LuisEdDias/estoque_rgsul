@@ -66,8 +66,6 @@
     </div>
 
     <script>
-        const moveItemModalClose = document.getElementById('close-move-item-modal');
-        const moveItemModalClose2 = document.getElementById('close-move-item-modal2');
         const moveItemModal = document.getElementById('move-item-modal');
         const moveItemForm = document.getElementById('move-item-form');
         const outBoxCheck = document.getElementById('out-box');
@@ -82,15 +80,8 @@
             }
         })
 
-        moveItemModalClose.addEventListener('click', function () {
-            window.location.reload();
-        });
-
-        moveItemModalClose2.addEventListener('click', function () {
-            window.location.reload();
-        });
-
         moveItemModal.addEventListener('show.bs.modal', ev => {
+            resetMovItemForm();
             const item = ev.relatedTarget;
             const itemId = item.getAttribute('data-id');
             const itemStatus = item.getAttribute('data-status');
@@ -114,11 +105,7 @@
         })
 
         async function movItem(id, comment, status, boxId) {
-            console.log(id);
-            console.log(comment);
-            console.log(status);
-            console.log(boxId);
-            return await fetch(`./../../item/${id}/move`, {
+            return await fetch(`./../../estoque-app/item/${id}/move`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"
@@ -130,6 +117,13 @@
                     })
                 }
             )
+        }
+
+        function resetMovItemForm(){
+            outBoxCheck.checked = false;
+            boxId.value = "";
+            boxId.disabled = false;
+            document.getElementById('move-comment').value = "";
         }
     </script>
 </div>

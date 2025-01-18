@@ -2,9 +2,17 @@ package br.net.rgsul.estoque.services;
 
 import br.net.rgsul.estoque.dto.*;
 import br.net.rgsul.estoque.entities.Box;
+import br.net.rgsul.estoque.entities.BoxFileDownload;
 import br.net.rgsul.estoque.repositories.BoxRepository;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @Service
@@ -85,5 +93,58 @@ public class BoxService {
         });
 
         return new GetBoxCheckDTO(itemsMap.values().stream().toList(), unboxedItems);
+    }
+
+    public void exportBox(int id){
+        List<GetItemDTO> items = findAllItems(id);
+        BoxFileDownload.file = new File("CAIXA " + id + ".xlsx");
+
+        try (FileOutputStream outputStream = new FileOutputStream(BoxFileDownload.file);
+             XSSFWorkbook workbook = createItemsToCheckWorkbook(items)) {
+
+            workbook.write(outputStream);
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private XSSFWorkbook createItemsToCheckWorkbook(List<GetItemDTO> items) throws IOException {
+        InputStream exportFileInputStream = getClass()
+                .getClassLoader()
+                .getResourceAsStream("EXPORTAR CAIXA.xlsx");
+
+        assert exportFileInputStream != null;
+        XSSFWorkbook workbook = new XSSFWorkbook(exportFileInputStream);
+        XSSFSheet sheet = workbook.getSheetAt(0);
+
+        CellStyle style = workbook.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBorderTop(BorderStyle.THIN);
+        style.setBorderLeft(BorderStyle.THIN);
+        style.setBorderRight(BorderStyle.THIN);
+
+        int rowIndex = 1;
+
+        for (GetItemDTO item : items) {
+            Row row = sheet.createRow(rowIndex++);
+            createCell(row, 0, item.name(), style);
+            createCell(row, 1, (double) item.id(), style);
+            createCell(row, 2, item.comment(), style);
+            createCell(row, 3, item.status(), style);
+            createCell(row, 4, item.updated(), style);
+        }
+
+        return workbook;
+    }
+
+    private void createCell(Row row, int column, Object value, CellStyle style) {
+        Cell cell = row.createCell(column);
+        if (value instanceof String) {
+            cell.setCellValue((String) value);
+        } else {
+            cell.setCellValue((double) value);
+        }
+        cell.setCellStyle(style);
     }
 }

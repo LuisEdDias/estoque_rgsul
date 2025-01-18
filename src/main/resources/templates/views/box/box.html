@@ -10,64 +10,81 @@
 </head>
 <body>
 <div layout:fragment="conteudo">
-    <div class="row align-items-center justify-content-center">
-        <div class="container py-5 h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col col-xxl-10">
-                    <div class="card mb-5 rounded-9 border-black border">
-                        <div class="card-body p-4">
+    <div class="align-items-lg-center justify-content-lg-center m-0 p-0 w-100">
+        <div class="container p-lg-5 h-100">
+            <div class="row d-flex justify-content-lg-center align-items-lg-center h-100">
+                <div class="col col-xxl-10 p-0">
+                    <div class="card mb-lg-5 m-1 rounded-9 border-black border">
+                        <div class="card-body text-center text-lg-start p-1 p-lg-4">
                             <h2 class="mb-3 fw-bold" th:text="'Caixa ' + ${box.id()} + ' : ' + ${box.name()}"></h2>
                             <h3 th:text="'Estoque: ' + ${box.warehouse()}"></h3>
                             <p class="mb-0" th:text="${box.description()}"></p>
-                            <hr class="my-4">
-                            <div class="d-flex justify-content-between justify-content-xxl-start align-items-center gap-3">
-                                <p class="mb-0 fw-bold text-muted">Total de Itens: <i class="text-black"
-                                                                                      th:text="${items.size()}"></i></p>
-                                <p class="mb-0 fw-bold text-muted">Status: <i class="text-black"
-                                                                              th:text="${box.status()}"></i></p>
-                                <p class="mb-0 text-uppercase"><span class="ms-3 me-4">|</span></p>
-                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                        data-bs-target="#delete-box-modal">
-                                    Remover Caixa
-                                </button>
-                                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
-                                        data-bs-target="#update-box-modal">
-                                    Editar
-                                </button>
-                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                        data-bs-target="#check-box-modal">
-                                    Conferir
-                                </button>
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#move-box-modal"
-                                        class="btn btn-light border border-black text-dark">
-                                    Mover
-                                </button>
+                            <hr class="my-2 my-lg-4">
+                            <div class="d-lg-flex justify-content-between justify-content-xxl-start align-items-center gap-3">
+                                <div class="d-flex gap-3 justify-content-center justify-content-lg-start mb-2">
+                                    <p class="mb-0 fw-bold text-muted">Total de Itens: <i class="text-black"
+                                                                                          th:text="${items.size()}"></i></p>
+                                    <p class="mb-0 fw-bold text-muted">Status: <i class="text-black"
+                                                                                  th:text="${box.status()}"></i></p>
+                                </div>
+
+                                <p class="mb-0 text-uppercase d-none d-lg-block"><span class="ms-3 me-4">|</span></p>
+
+                                <div class="d-flex flex-wrap justify-content-center gap-3">
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                            data-bs-target="#delete-box-modal">
+                                        Remover Caixa
+                                    </button>
+
+                                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
+                                            data-bs-target="#update-box-modal">
+                                        Editar
+                                    </button>
+
+                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                            data-bs-target="#check-box-modal">
+                                        Conferir
+                                    </button>
+
+                                    <button type="button" data-bs-toggle="modal" data-bs-target="#move-box-modal"
+                                            class="btn btn-light border border-black text-dark">
+                                        Mover
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="list-group align-middle mb-0 bg-white" th:hidden="${items == null || items.isEmpty()}">
+                    <div class="list-group align-middle mb-0 bg-white table-responsive-lg" th:hidden="${items == null || items.isEmpty()}">
                         <table class="table table-hover table-sm text-center">
                             <thead class="sticky-top">
                             <tr>
                                 <th colspan="100%">
                                     <div class="row justify-content-between px-2">
-                                        <div class="col-4 pe-1">
-                                            <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
+                                        <div class="col-3">
+                                            <button type="button" class="btn btn-success w-75" data-bs-toggle="modal"
                                                     data-bs-target="#new-item-modal">
                                                 Adicionar Item
                                             </button>
                                         </div>
-                                        <div class="col-4 px-1">
-                                            <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                                        <div class="col-3">
+                                            <button type="button" class="btn btn-primary w-75" data-bs-toggle="modal"
                                                     data-bs-target="#add-items-by-file-modal">
                                                 Adicionar Lista
                                             </button>
                                         </div>
 
-                                        <div class="col-4 ps-1">
+                                        <div class="col-3">
+                                            <button type="button" class="btn btn-outline-success w-75">
+                                                <a th:href="@{'/box/' + ${box.id()} + '/export'}" class="text-reset">
+                                                    Exportar Excel
+                                                </a>
+                                            </button>
+                                        </div>
+
+                                        <div class="col-3">
                                             <button type="button" data-bs-toggle="modal" data-bs-target="#move-all-items-modal"
-                                                    class="btn btn-light btn-lg border border-black text-dark">Mover
-                                                Selecionados
+                                                    class="btn btn-light border border-black text-dark">
+                                                Mover Selecionados
                                             </button>
                                         </div>
                                     </div>

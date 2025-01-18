@@ -87,7 +87,7 @@
         })
 
         async function movItem(id, name, comment, status) {
-            return await fetch(`./../../item/${id}`, {
+            return await fetch(`./../../estoque-app/item/${id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"

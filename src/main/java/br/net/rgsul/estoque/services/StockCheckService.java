@@ -1,6 +1,6 @@
 package br.net.rgsul.estoque.services;
 
-import br.net.rgsul.estoque.entities.FileDownload;
+import br.net.rgsul.estoque.entities.StockCheckFileDownload;
 import br.net.rgsul.estoque.entities.Item;
 import br.net.rgsul.estoque.entities.StockCheck;
 import br.net.rgsul.estoque.dto.StockCheckDTO;
@@ -10,7 +10,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,9 +24,8 @@ public class StockCheckService {
     }
 
     private void executeStockCheck(StockCheck stockCheck, List<Item> items) {
-        Timestamp init = new Timestamp(System.currentTimeMillis());
-        FileDownload.file = null;
-        FileDownload.itemsToBeChecked = null;
+        StockCheckFileDownload.file = null;
+        StockCheckFileDownload.itemsToBeChecked = null;
 
         try (InputStream fileInputStream = stockCheck.getPrincipal().getInputStream();
              XSSFWorkbook principalWorkbook = new XSSFWorkbook(fileInputStream)) {
@@ -58,23 +56,18 @@ public class StockCheckService {
                 }
             }
 
-            Timestamp date = new Timestamp(System.currentTimeMillis());
             if (!itemsToBeChecked.isEmpty()) {
                 XSSFWorkbook toCheckWorkbook = createItemsToCheckWorkbook(itemsToBeChecked);
-                FileDownload.itemsToBeChecked = new File(
-                        "ITENS À VERIFICAR " + date.toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + ".xlsx"
-                );
-                saveWorkbookToFile(toCheckWorkbook, FileDownload.itemsToBeChecked);
+                StockCheckFileDownload.itemsToBeChecked = new File("ITENS À VERIFICAR.xlsx");
+                saveWorkbookToFile(toCheckWorkbook, StockCheckFileDownload.itemsToBeChecked);
             }
 
-            FileDownload.file = new File("PEL - FECHAMENTO ESTOQUE.xlsx");
-            saveWorkbookToFile(principalWorkbook, FileDownload.file);
+            StockCheckFileDownload.file = new File("PEL - FECHAMENTO ESTOQUE.xlsx");
+            saveWorkbookToFile(principalWorkbook, StockCheckFileDownload.file);
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-
-        System.out.println("Tempo de execução: " + (new Timestamp(System.currentTimeMillis()).getTime() - init.getTime()));
     }
 
     private Map<Double, Row> buildRowIndex(XSSFSheet sheet, int searchColumn) {

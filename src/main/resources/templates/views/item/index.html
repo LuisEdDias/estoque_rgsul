@@ -11,11 +11,11 @@
 <body>
 <div layout:fragment="conteudo">
     <div class="row align-items-center justify-content-center">
-        <div class="align-middle mb-0 bg-white" th:hidden="${items == null || items.isEmpty()}">
+        <div class="align-middle mb-0 bg-white table-responsive-lg" th:hidden="${items == null || items.isEmpty()}">
             <table class="table table-hover table-sm text-center">
                 <thead class="sticky-top">
                 <tr class="table-secondary">
-                    <th colspan="6" class="text-center fs-3" th:text="'Estoque ' + ${currentWarehouse.nameStr}"></th>
+                    <th colspan="6" class=" text-start text-lg-center fs-3" th:text="'Estoque ' + ${currentWarehouse.nameStr}"></th>
                 </tr>
                 <tr class="table-secondary" id="table-input">
                     <th scope="col" class="col-1">
@@ -64,14 +64,14 @@
                 <tr class="table-item-row">
                     <td class="item-id text-start fw-medium" th:text="${item.id()}"></td>
                     <td class="item text-start fw-medium">
-                        <a class="d-block w-100 h-100 text-reset" th:href="@{'item/' + ${item.id()}}"
+                        <a class="d-block w-100 h-100 text-reset" th:href="@{'./../' + ${item.id()}}"
                            th:text="${item.name()}"></a>
                     </td>
                     <td class="updated" th:text="${item.updated()}"></td>
                     <td class="status" th:text="${item.status()}"></td>
                     <td class="box-id">
                         <a class="d-block w-100 h-100 text-reset" th:text="${item.boxId()}"
-                           th:href="@{'box/' + ${item.boxId()}}"></a>
+                           th:href="@{'./../../box/' + ${item.boxId()}}"></a>
                     </td>
                     <td>
                         <button type="button" data-bs-toggle="modal" data-bs-target="#move-item-modal"

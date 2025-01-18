@@ -24,9 +24,10 @@
 <header class="container-fluid row m-0 p-0">
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
             aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
-        <i class="fas fa-square-caret-left fa-5x position-fixed bottom-50 end-0 z-1 p-3"></i>
+        <i class="fas fa-square-caret-left fa-5x position-fixed bottom-50 end-0 z-1 p-3 d-none d-lg-block"></i>
+        <i class="fas fa-square-caret-left fa-4x position-fixed bottom-0 end-0 z-1 p-3 d-lg-none"></i>
     </button>
-    <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
+    <div class="offcanvas offcanvas-end text-bg-dark border-0" tabindex="-1" id="offcanvasDarkNavbar"
          aria-labelledby="offcanvasDarkNavbarLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Estoque RGSul</h5>
@@ -34,14 +35,16 @@
                     aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/box">Todas as Caixas</a>
-                </li>
-            </ul>
+                    <button type="button" class="btn btn-light btn-lg w-100 mt-3">
+                        <a class="nav-link active" aria-current="page" href="/estoque-app/">Home</a>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg w-100 mt-3">
+                        <a href="/estoque-app/box" class="nav-link active">Todas as Caixas</a>
+                    </button>
+                    <button type="button" class="btn btn-success btn-lg w-100 mt-3"
+                            data-bs-toggle="modal" data-bs-target="#new-box-modal">
+                        Adicionar Caixa
+                    </button>
             <form class="d-flex mt-3" role="search" id="search-box-form">
                 <input class="form-control me-2" id="search-box-input" type="search" placeholder="Número da Caixa" aria-label="Search">
                 <button class="btn btn-success" type="submit">Buscar Caixa</button>
@@ -68,12 +71,12 @@
 </header>
 
 <main class="container-fluid justify-content-center my-auto">
-    <div class="row align-items-center justify-content-center px-2">
-        <div class="col-10 justify-content-center m-0 py-3 px-0">
-            <div class="card rounded-3">
+    <div class="row align-items-center justify-content-center px-lg-2">
+        <div class="col-lg-10 justify-content-center m-0 py-lg-3 px-0">
+            <div class="card rounded-lg-3">
                 <img src="https://media.licdn.com/dms/image/D4D3DAQHipi98N7U3Kg/image-scale_191_1128/0/1661370159038/rg_sul_internet_cover?e=2147483647&v=beta&t=KfgNSvDaBwYBTfn1p5G9rPULhVzKyty0HihfYX7CFaY"
-                     class="w-100 rounded-top" alt="Sample photo">
-                <div class="card-body row justify-content-center" layout:fragment="conteudo"></div>
+                     class="w-100 rounded-lg-top" alt="Sample photo">
+                <div class="card-body justify-content-center p-0 p-lg-3" layout:fragment="conteudo"></div>
             </div>
         </div>
     </div>
@@ -87,7 +90,7 @@
 
         <div>
             <a class="btn text-white border border-light py-1 px-2 align-self-center"
-               href="https://github.com/LuisEdDias/projeto_integrador_iii_b" role="button">
+               href="https://github.com/LuisEdDias/estoque_rgsul" role="button">
                 <i class="fab fa-github fa-2x"></i>
             </a>
         </div>
@@ -98,6 +101,9 @@
     </div>
 </footer>
 
+<!--New Box Modal-->
+<div th:replace="~{views/fragments/new-box-modal}"></div>
+
 <script>
     const searchBoxForm = document.getElementById('search-box-form');
     const searchItemForm = document.getElementById('search-item-form');
@@ -105,28 +111,28 @@
     searchBoxForm.addEventListener('submit', async function(ev){
         ev.preventDefault();
         const searchBoxInput = document.getElementById('search-box-input').value;
-        const connection = await fetch(`/box/${searchBoxInput}`, {
+        const connection = await fetch(`/estoque-app/box/${searchBoxInput}`, {
             method: "GET"
         });
 
         if (!connection.ok){
             alert("Caixa não encontrada!");
         } else {
-            window.location.assign(`/box/${searchBoxInput}`);
+            window.location.assign(`/estoque-app/box/${searchBoxInput}`);
         }
     })
 
     searchItemForm.addEventListener('submit', async function(ev){
         ev.preventDefault();
         const searchItemInput = document.getElementById('search-item-input').value;
-        const connection = await fetch(`/item/${searchItemInput}`, {
+        const connection = await fetch(`/estoque-app/item/${searchItemInput}`, {
             method: "GET"
         });
 
         if (!connection.ok){
             alert("Item não encontrado!");
         } else {
-            window.location.assign(`/item/${searchItemInput}`);
+            window.location.assign(`/estoque-app/item/${searchItemInput}`);
         }
     })
 
@@ -140,7 +146,7 @@
         if (warehouseSelected.disabled) {
             alert("Selecione um estoque!")
         } else {
-            window.location.assign(`/item/estoque/${warehouseSelected.value}`);
+            window.location.assign(`/estoque-app/item/estoque/${warehouseSelected.value}`);
         }
     })
 </script>

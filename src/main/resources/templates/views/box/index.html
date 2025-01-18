@@ -10,8 +10,8 @@
 </head>
 <body>
 <div layout:fragment="conteudo">
-    <div class="row align-items-center justify-content-center vh-50">
-        <div class="list-group align-middle mb-0 bg-white" th:hidden="${boxes == null || boxes.isEmpty()}">
+    <div class="align-items-center justify-content-center">
+        <div class="list-group align-middle mb-0 bg-white table-responsive-lg" th:hidden="${boxes == null || boxes.isEmpty()}">
             <table class="table table-hover table-sm text-center align-middle">
                 <thead class="sticky-top">
                 <tr class="table-secondary" id="table-input">
@@ -66,13 +66,16 @@
                 <tbody class="table-hover" th:each="box : ${boxes}">
                 <tr class="table-item-row">
                     <td class="box-id fw-medium" th:text="${box.id()}"></td>
-                    <td class="name text-start fw-medium" th:text="${box.name()}"></td>
+                    <td class="name text-start fw-medium">
+                        <a class="d-block w-100 h-100 text-reset" th:href="@{'box/' + ${box.id()}}"
+                           th:text="${box.name()}"></a>
+                    </td>
                     <td class="status" th:text="${box.status()}"></td>
                     <td class="updated" th:text="${box.updated()}"></td>
                     <td class="warehouse" th:text="${box.warehouse()}"></td>
-                    <td>
-                        <button type="button" class="btn btn-outline-primary w-75 my-1 p-0">
-                            <a class="d-block py-2" th:href="@{'box/' + ${box.id()}}">Ver</a>
+                    <td class="d-flex">
+                        <button type="button">
+                            <a class="p-2 text-dark" th:href="@{'box/' + ${box.id()}}">Ver</a>
                         </button>
                     </td>
                 </tr>
@@ -83,7 +86,7 @@
             <div class="flex-column" th:hidden="${!boxes.isEmpty()}">
                 <h3 class="row fs-5 py-4 justify-content-center">Não existem caixas cadastradas!</h3>
             </div>
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mb-3">
                 <button type="button" class="btn btn-success btn-lg col-8 col-md-6 col-sm-3"
                         data-bs-toggle="modal" data-bs-target="#new-box-modal">
                     Adicionar Caixa
@@ -91,9 +94,6 @@
             </div>
         </div>
     </div>
-
-    <!--New Box Modal-->
-    <div th:replace="~{views/fragments/new-box-modal}"></div>
 
     <!-- Box Filter Script -->
     <script th:replace="~{views/fragments/box-list-filter}"></script>

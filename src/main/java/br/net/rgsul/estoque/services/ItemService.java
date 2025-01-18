@@ -161,7 +161,7 @@ public class ItemService {
             Box oldBox = item.getBox();
 
             // Movimenta o item
-            item.move(null, moveAllDTO.comment(), newBox);
+            item.move(moveAllDTO.status(), moveAllDTO.comment(), newBox);
 
             // Cria o registro de movimentação
             movements.add(new Movement(item));

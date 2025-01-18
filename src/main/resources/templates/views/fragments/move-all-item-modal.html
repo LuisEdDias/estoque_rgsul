@@ -29,6 +29,22 @@
                                 <label for="move-all-out-box">Remover da caixa</label>
                             </div>
                         </div>
+                        <div class="col-lg-9 pb-4 d-flex flex-column justify-content-between">
+                            <label for="move-all-status" class="visually-hidden">Status</label>
+                            <select class="custom-select h-100 pb-3 pt-1 ps-1" name="status" id="move-all-status"
+                                    disabled>
+                                <option id="statusSelectDisabled" disabled selected>Selecionar Status</option>
+                                <option th:each="stt : ${itemStatus}"
+                                        th:value="${stt}"
+                                        th:text="${stt.nameStr}">
+                                </option>
+                            </select>
+
+                            <div data-mdb-input-init class="form-outline">
+                                <input id="move-all-status-checkbox" class="form-check-input" type="checkbox">
+                                <label for="move-all-status-checkbox">Alterar status dos items</label>
+                            </div>
+                        </div>
                         <div class="d-lg-flex col-lg-9 justify-content-lg-between">
                             <div data-mdb-input-init class="form-outline">
                                 <textarea name="comment" class="form-control fs-4" id="move-all-comment"
@@ -49,11 +65,12 @@
     </div>
 
     <script>
-        const moveAllItemsModalClose = document.getElementById('close-move-all-items-modal');
-        const moveAllItemsModalClose2 = document.getElementById('close-move-all-items-modal2');
         const moveAllItemsForm = document.getElementById('move-all-items-form');
         const outBoxCheck2 = document.getElementById('move-all-out-box');
         const boxId2 = document.getElementById('move-all-box-id');
+        const allItemsStatusCheck = document.getElementById('move-all-status-checkbox');
+        const selectAllItemsStatus = document.getElementById('move-all-status');
+
 
         outBoxCheck2.addEventListener('change', function () {
             if (outBoxCheck2.checked) {
@@ -62,14 +79,11 @@
             } else {
                 boxId2.disabled = false;
             }
-        })
-
-        moveAllItemsModalClose.addEventListener('click', function () {
-            window.location.reload();
         });
 
-        moveAllItemsModalClose2.addEventListener('click', function () {
-            window.location.reload();
+        allItemsStatusCheck.addEventListener('change', function () {
+            selectAllItemsStatus.options.item(0).selected = true;
+            selectAllItemsStatus.disabled = !allItemsStatusCheck.checked;
         });
 
         moveAllItemsForm.addEventListener('submit', async function (ev) {
@@ -81,18 +95,23 @@
             if (idsList.length === 0) {
                 alert("Nenhum item foi selecionado!");
             } else {
-                const response = await movAllItems(idsList, comment, newBox);
+                try {
+                    const newStatus = getAllItemsStatus();
+                    const response = await movAllItems(idsList, comment, newStatus, newBox);
 
-                if (!response.ok) {
-                    alert("Caixa não encontrada!")
-                } else {
-                    window.location.reload();
+                    if (!response.ok) {
+                        alert("Caixa não encontrada!")
+                    } else {
+                        window.location.reload();
+                    }
+                } catch (e) {
+                    alert(e.message);
                 }
             }
-        })
+        });
 
-        async function movAllItems(ids, comment, boxId) {
-            return await fetch(`./../../item/move-all`, {
+        async function movAllItems(ids, comment, status, boxId) {
+            return await fetch(`./../../estoque-app/item/move-all`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"
@@ -100,13 +119,14 @@
                     body: JSON.stringify({
                         ids: ids,
                         comment: comment,
+                        status: status,
                         boxId: boxId
                     })
                 }
             );
         }
 
-        function getAllItemsChecked(){
+        function getAllItemsChecked() {
             const ids = [];
             const itemRows = Array.from(document.getElementsByClassName('table-item-row'));
 
@@ -117,6 +137,19 @@
             });
             console.log(ids);
             return ids;
+        }
+
+        function getAllItemsStatus() {
+            if (!allItemsStatusCheck.checked) {
+                return null;
+            }
+
+            const allItemsStatus = selectAllItemsStatus.options[selectAllItemsStatus.selectedIndex];
+            if (allItemsStatus.disabled) {
+                throw new Error("Selecione um Status ou desmarque a opção!");
+            }
+
+            return allItemsStatus.value;
         }
     </script>
 </div>
