@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mover Caixa</title>
+</head>
+<body>
+<div th:fragment="move-box-modal" class="modal fade" id="move-box-modal" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="container" id="move-box-form">
+                <div class="row justify-content-center">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Mover Caixa</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-9 pb-4">
+                                <p class="mb-3 fs-3 fw-bold text-center" th:text="'Caixa ' + ${box.id()}"></p>
+                                <p class="mb-3 fs-4 text-center" th:text="${box.name()}"></p>
+                                <p  class="mb-3 fs-5 fw-bold">Estoque atual: <i class="fs-3 text-dark" th:text="${box.warehouse()}"></i></p>
+                            </div>
+
+                            <div class="col-lg-9 pb-4 d-flex justify-content-between">
+                                <label class="visually-hidden" for="move-to-warehouse">Estoque</label>
+                                <div class="input-group">
+                                    <div class="input-group-text fw-bold">MOVER PARA</div>
+                                    <select class="custom-select h-100 w-100" name="warehouse"
+                                            id="move-to-warehouse" required>
+                                        <option  disabled selected>Selecionar</option>
+                                        <option th:each="opt : ${warehouse}"
+                                                th:value="${opt}"
+                                                th:name="${opt.nameStr}"
+                                                th:text="${opt.nameStr}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input class="visually-hidden" id="move-box-id" th:value="${box.id()}" />
+                            <input class="visually-hidden" id="current-warehouse" th:value="${box.warehouse()}"/>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary" >Mover</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const moveBoxModal = document.getElementById('move-box-modal')
+        const moveBoxForm = document.getElementById('move-box-form');
+
+        moveBoxModal.addEventListener('show.bs.modal', () => {
+            const currentWarehouse = document.getElementById('current-warehouse').value;
+            document.getElementById('move-to-warehouse').options.namedItem(currentWarehouse).disabled = true;
+        })
+
+        moveBoxForm.addEventListener('submit', async function (ev) {
+            ev.preventDefault();
+            const warehouseSelect = document.getElementById('move-to-warehouse');
+            const warehouse = warehouseSelect.options[warehouseSelect.selectedIndex];
+
+            if (warehouse.disabled) {
+                alert("Selecione um estoque de destino!");
+            } else {
+                const boxId = document.getElementById('move-box-id').value;
+                const response = await moveBox(boxId, warehouse.value);
+
+                if (!response.ok) {
+                    alert("Não foi possível mover a caixa!")
+                } else {
+                    window.location.reload();
+                }
+            }
+        });
+
+        async function moveBox(id, warehouse) {
+            return await fetch("./../../estoque-app/box/" + id + "/move", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        warehouse: warehouse
+                    })
+                }
+            );
+        }
+    </script>
+</div>
+</body>
+</html>

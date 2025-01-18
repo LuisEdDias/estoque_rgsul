@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Deletar Caixa</title>
+</head>
+<body>
+<div th:fragment="delete-box-modal" class="modal fade" id="delete-box-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Deletar Caixa</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="fs-2" th:text="'Tem certeza que deseja deletar a caixa ' + ${box.id()} + ' ?'"></p>
+                    <p class="fs-2 fw-bold">ESSA AÇÃO NÃO PODERÁ SER DESFEITA</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger" id="delete-box"><a>Deletar</a></button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

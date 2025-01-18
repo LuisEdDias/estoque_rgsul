@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conferir Itens da Caixa</title>
+</head>
+<body>
+<div th:fragment="check-box-modal" class="modal fade" id="check-box-modal" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Verificação de Itens na Caixa</h1>
+                        <button type="button" class="btn-close" id="close-check-box-modal" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="row justify-content-center" id="check-box-form">
+                            <div id="alert-add-item-to-check-success" class="alert alert-success text-center"
+                                 role="alert" style="display: none">
+                                Item adicionado com sucesso!
+                            </div>
+                            <div class="col-lg-9 pb-4 d-flex justify-content-between">
+                                <div class="input-group form-outline" data-mdb-input-init>
+                                    <input name="id" type="text" id="id-to-check"
+                                           class="form-control text-black-75 fs-4" pattern="^\d+$" maxlength="7"/>
+                                    <label class="form-label" for="id-to-check">ID</label>
+                                    <button class="btn btn-success" type="submit" data-mdb-ripple-init data-mdb-ripple-color="dark">
+                                        Adicionar
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary col-6 mb-2" id="post-items">
+                                Realizar Conferência
+                            </button>
+                        </form>
+                        <div id="check-result" style="display: none">
+                            <h3 id="check-success">Todos os itens verificados estão corretos!</h3>
+                            <div id="items-not-found" style="display: none">
+                                <h3>Itens Faltantes</h3>
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Item</th>
+                                            <th>ID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="result-body"></tbody>
+                                </table>
+                                <hr>
+                            </div>
+                            <div id="unregistered-item" style="display: none">
+                                <h3>Itens Fora da Caixa</h3>
+                                <ol id="unregistered-items"></ol>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="close-check-box-modal2"
+                                    data-bs-dismiss="modal">Fechar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const checkBoxModalClose = document.getElementById('close-check-box-modal');
+        const checkBoxModalClose2 = document.getElementById('close-check-box-modal2');
+        const alertAddItemToCheckSuccess = document.getElementById('alert-add-item-to-check-success');
+        const itemsToCheckForm = document.getElementById('check-box-form');
+        const postItemsToCheck = document.getElementById("post-items");
+        const checkResultView = document.getElementById('check-result');
+        const idToCheck = document.getElementById('id-to-check');
+        let items = [];
+
+        checkBoxModalClose.addEventListener('click', function () {
+            items = [];
+        });
+
+        checkBoxModalClose2.addEventListener('click', function () {
+            items = [];
+        });
+
+        itemsToCheckForm.addEventListener('submit', async function (ev) {
+            ev.preventDefault();
+            items.push(parseInt(idToCheck.value));
+            idToCheck.value = "";
+            alertAddItemToCheckSuccess.style.display = 'block';
+            await new Promise(r => setTimeout(r, 2000));
+            alertAddItemToCheckSuccess.style.display = 'none';
+        })
+
+        postItemsToCheck.addEventListener('click', async function () {
+            const response = await postItems();
+
+            if (!response.ok) {
+                alert("Erro ao realizar verificação!")
+            } else {
+                const checkSuccess = document.getElementById('check-success');
+                const itemsNotFound = document.getElementById('items-not-found');
+                const resultBody = document.getElementById('result-body');
+                const unregisteredItem = document.getElementById('unregistered-item');
+                const unregisteredItems = document.getElementById('unregistered-items');
+
+                await response.json().then(data => {
+                    const itemsNotFoundList = data.itemsNotFound;
+                    const unregisteredItemsList = data.unboxedItems;
+
+                    if (itemsNotFoundList.length > 0) {
+                        let i = 1;
+                        checkSuccess.style.display = 'none';
+                        itemsNotFound.style.display = 'block';
+
+                        itemsNotFoundList.forEach(
+                            item => {
+                                const line = document.createElement('tr');
+                                const rowHeader = document.createElement('th');
+                                rowHeader.textContent = i.toString();
+                                const celName = document.createElement('td');
+                                celName.textContent = item.name;
+                                const celId = document.createElement('td');
+                                celId.textContent = item.id;
+                                line.appendChild(rowHeader);
+                                line.appendChild(celName);
+                                line.appendChild(celId);
+                                resultBody.appendChild(line);
+                                i++;
+                            }
+                        )
+                    }
+
+                    if (unregisteredItemsList.length > 0) {
+                        checkSuccess.style.display = 'none';
+                        unregisteredItem.style.display = 'block';
+
+                        unregisteredItemsList.forEach(
+                            item => {
+                                const line = document.createElement('li');
+                                line.textContent = item.toString();
+                                unregisteredItems.appendChild(line);
+                            }
+                        )
+                    }
+
+                    itemsToCheckForm.style.display = "none";
+                    checkResultView.style.display = "block";
+                });
+            }
+        })
+
+        async function postItems() {
+            return await fetch(document.URL + "/check", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        ids: items
+                    })
+                }
+            )
+        }
+    </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Caixa</title>
+</head>
+<body>
+<div th:fragment="new-box-modal" class="modal fade" id="new-box-modal" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="container" method="post" action="/estoque-app/box">
+                <div class="row justify-content-center">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Nova Caixa</h1>
+                        <button type="button" class="btn-close" id="close-new-box-modal" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-9 pb-4">
+                                <div data-mdb-input-init class="form-outline">
+                                    <input name="name" type="text" id="name"
+                                           class="form-control text-black-75 fs-4" required/>
+                                    <label class="form-label" for="name">Nome</label>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-9 pb-4 d-flex justify-content-between">
+                                <div class="col-5">
+                                    <div data-mdb-input-init class="form-outline">
+                                        <input name="id" type="text" id="id" class="form-control text-black-75 fs-4"
+                                               pattern="^\d+$" maxlength="5" required/>
+                                        <label class="form-label" for="id">Número</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-5 d-flex align-items-center">
+                                    <label class="visually-hidden" for="selectStatus">Status</label>
+                                    <select class="custom-select h-100" name="status" id="selectStatus" required>
+                                        <option disabled selected>Status</option>
+
+                                        <option th:each="stt : ${boxStatus}"
+                                                th:value="${stt}"
+                                                th:text="${stt.nameStr}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-9 d-flex pb-4">
+                                <label class="visually-hidden" for="warehouse">Estoque</label>
+                                <div class="input-group">
+                                    <div class="input-group-text">ESTOQUE</div>
+                                    <select class="custom-select h-100 w-100" name="warehouse" id="warehouse" required>
+                                        <option disabled selected>Selecionar</option>
+
+                                        <option th:each="opt : ${warehouse}"
+                                                th:value="${opt}"
+                                                th:text="${opt.nameStr}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-9 pb-4">
+                                <div data-mdb-input-init class="form-outline">
+                                    <textarea name="description" class="form-control fs-4" id="description"></textarea>
+                                    <label for="description" class="form-label">Descrição</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="close-new-box-modal2"
+                                    data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="post-new-box">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

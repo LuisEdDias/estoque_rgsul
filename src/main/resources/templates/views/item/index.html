@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template.html}"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Todos os Itens</title>
+</head>
+<body>
+<div layout:fragment="conteudo">
+    <div class="row align-items-center justify-content-center">
+        <div class="align-middle mb-0 bg-white table-responsive-lg" th:hidden="${items == null || items.isEmpty()}">
+            <table class="table table-hover table-sm text-center">
+                <thead class="sticky-top">
+                <tr class="table-secondary">
+                    <th colspan="6" class=" text-start text-lg-center fs-3" th:text="'Estoque ' + ${currentWarehouse.nameStr}"></th>
+                </tr>
+                <tr class="table-secondary" id="table-input">
+                    <th scope="col" class="col-1">
+                        <div class="form-outline" data-mdb-input-init>
+                            <input type="text" class="form-control bg-white" id="search-item-id" placeholder="ID">
+                            <label class="form-label" for="search-item-id">ID</label>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-auto">
+                        <div class="form-outline" data-mdb-input-init>
+                            <input type="text" class="form-control bg-white" id="search-item" placeholder="Item">
+                            <label class="form-label" for="search-item">Item</label>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-2 align-items-center">
+                        <div class="form-outline" data-mdb-input-init>
+                            <input type="text" class="form-control bg-white" id="search-updated"
+                                   placeholder="dd/mm/aaaa" maxlength="10">
+                            <label class="form-label" for="search-updated">Atualizado</label>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-2">
+                        <div class="form-outline" data-mdb-input-init>
+                            <label class="visually-hidden" for="select-status"></label>
+                            <select class="form-select" id="select-status" data-mdb-select-init>
+                                <option selected>Status</option>
+
+                                <option th:each="stt : ${itemStatus}"
+                                        th:value="${stt}"
+                                        th:text="${stt.nameStr}">
+                                </option>
+                            </select>
+                        </div>
+                    </th>
+                    <th scope="col" class="col-1">
+                        <div class="form-outline" data-mdb-input-init>
+                            <input type="text" class="form-control bg-white" id="search-box-id" placeholder="Caixa">
+                            <label class="form-label" for="search-box-id">Caixa</label>
+                        </div>
+                    </th>
+                    <th scope="col">
+                    </th>
+                </tr>
+                </thead>
+                <tbody th:each="item : ${items}">
+                <tr class="table-item-row">
+                    <td class="item-id text-start fw-medium" th:text="${item.id()}"></td>
+                    <td class="item text-start fw-medium">
+                        <a class="d-block w-100 h-100 text-reset" th:href="@{'./../' + ${item.id()}}"
+                           th:text="${item.name()}"></a>
+                    </td>
+                    <td class="updated" th:text="${item.updated()}"></td>
+                    <td class="status" th:text="${item.status()}"></td>
+                    <td class="box-id">
+                        <a class="d-block w-100 h-100 text-reset" th:text="${item.boxId()}"
+                           th:href="@{'./../../box/' + ${item.boxId()}}"></a>
+                    </td>
+                    <td>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#move-item-modal"
+                                th:attr="data-id=${item.id()},data-status=${item.status()}"
+                        >
+                            Mover
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="container" th:hidden="${!items.isEmpty()}">
+            <h3 class="row fs-5 py-4 justify-content-center">Não existem itens cadastrados!</h3>
+        </div>
+    </div>
+
+    <!--Move All Items Modal-->
+    <div th:replace="~{views/fragments/move-all-item-modal}"></div>
+
+    <!--Move Item Modal-->
+    <div th:replace="~{views/fragments/move-item-modal}"></div>
+
+    <!-- Items Filter Script -->
+    <script th:replace="~{views/fragments/item-list-filter}"></script>
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script th:fragment="item-list-filter">
+    const tableInput = document.getElementById('table-input');
+    const itemRows = Array.from(document.getElementsByClassName('table-item-row'));
+
+    // Debounce
+    let debounceTimeout;
+    function debounceFilter() {
+        clearTimeout(debounceTimeout); // Limpa o timeout anterior
+        debounceTimeout = setTimeout(() => {
+            filter(); // Executa o filtro após o tempo de espera
+        }, 700); // Tempo de espera em milisegundos(ajustável)
+    }
+
+    // Adiciona listener ao campo de entrada principal para ativar o filtro com debounce
+    tableInput.addEventListener('input', debounceFilter);
+
+    // Função auxiliar para obter o valor de um campo de entrada
+    function getInputValue(id) {
+        const element = document.getElementById(id);
+        return element ? element.value.trim() : '';
+    }
+
+    function filter() {
+        const itemIdSearch = getInputValue('search-item-id');
+        const itemSearch = getInputValue('search-item').toLowerCase();
+        const updatedSearch = getInputValue('search-updated');
+        const selectStatus = document.getElementById('select-status').selectedOptions.item(0).textContent;
+        const boxIdSearch = document.getElementById('search-box-id');
+
+        itemRows.forEach(row => {
+            const itemId = row.querySelector('.item-id').textContent;
+            const itemName = row.querySelector('.item').textContent.toLowerCase();
+            const updated = row.querySelector('.updated').textContent.substring(0, 10);
+            const status = row.querySelector('.status').textContent;
+            const boxId = row.querySelector('.box-id')?.textContent || '';
+
+            const matches =
+                itemId.includes(itemIdSearch) &&
+                itemName.includes(itemSearch.toLowerCase()) &&
+                updated.includes(updatedSearch) &&
+                (selectStatus === 'Status' || selectStatus === status) &&
+                (!boxIdSearch || boxId.includes(boxIdSearch.value));
+
+            row.style.display = matches ? "" : "none";
+        });
+    }
+
+    // Date Mask
+    const updatedSearchInput = document.getElementById('search-updated');
+
+    updatedSearchInput.addEventListener('input', () => {
+        updatedSearchInput.value = dateMask(updatedSearchInput.value);
+    });
+
+    function dateMask (value) {
+        value = value.replace(/\D/g,'');
+        value = value.replace(/(\d{2})(\d)/,"$1/$2");
+        value = value.replace(/(\d{2})(\d)/,"$1/$2");
+        return value;
+    }
+</script>
+</body>
+</html>

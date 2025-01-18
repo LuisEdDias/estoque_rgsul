@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Atualizar Item</title>
+</head>
+<body>
+
+<div th:fragment="update-item-modal" class="modal fade" id="update-item-modal" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Atualizar Item</h1>
+                <button type="button" class="btn-close" id="close-update-item-modal" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="container" id="update-item-form">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-9 pb-4 d-flex justify-content-between">
+                            <div data-mdb-input-init class="form-outline">
+                                <input name="name" type="text" id="name" class="form-control text-black-75 fs-4"
+                                       th:value="${item.name()}" required/>
+                                <label class="form-label" for="name">Nome</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 pb-4 d-flex">
+                            <div class="col-4">
+                                <label for="update-status" class="visually-hidden">Status</label>
+                                <select class="custom-select h-100" name="status" id="update-status">
+                                    <option th:each="stt : ${itemStatus}"
+                                            th:value="${stt}"
+                                            th:name="${stt.nameStr}"
+                                            th:text="${stt.nameStr}"
+                                    >
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 pb-4 d-flex justify-content-between">
+                            <div data-mdb-input-init class="form-outline">
+                                <textarea name="comment" class="form-control fs-4" id="update-comment"
+                                          rows="1" th:text="${item.comment()}"></textarea>
+                                <label for="update-comment" class="form-label">Comentário</label>
+                            </div>
+                        </div>
+                        <div class="col-12" hidden="hidden">
+                            <input name="itemId" type="text" class="form-control fs-4" id="item-id"
+                                   th:value="${item.id()}"/>
+                            <label class="form-label fs-4 me-1" for="item-id">ID</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="close-update-item-modal2"
+                                data-bs-dismiss="modal">Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="update-item">Atualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const updateItemForm = document.getElementById('update-item-form');
+        const updateItemModal = document.getElementById('update-item-modal');
+
+        updateItemModal.addEventListener('show.bs.modal', () => {
+            const itemStatus = document.getElementById('itemStatus').innerText;
+            document.getElementById('update-status').options.namedItem(itemStatus).selected = true;
+        })
+
+        updateItemForm.addEventListener('submit', async function (ev) {
+            ev.preventDefault();
+            const id = document.getElementById('item-id').value;
+            const name = document.getElementById('name').value;
+            const comment = document.getElementById('update-comment').value;
+            const status = document.getElementById('update-status');
+            const response = await movItem(id, name, comment, status.options[status.selectedIndex].value);
+
+            if (!response.ok) {
+                alert("Falha ao atualizar dados!")
+            } else {
+                window.location.reload();
+            }
+        })
+
+        async function movItem(id, name, comment, status) {
+            return await fetch(`./../../estoque-app/item/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        comment: comment,
+                        status: status
+                    })
+                }
+            )
+        }
+    </script>
+</div>
+</body>
+</html>

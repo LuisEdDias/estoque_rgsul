@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template.html}"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Item</title>
+</head>
+<body>
+<div layout:fragment="conteudo" class="d-lg-flex p-lg-3 gap-lg-2">
+    <div class="col-lg-6 card rounded-3 border border-black p-3 d-flex mb-auto m-1 m-lg-0">
+        <div class="row">
+            <div class="col-sm-3">
+                <p class="mb-0">ID</p>
+            </div>
+            <div class="col-sm-9">
+                <p class="text-muted fw-medium mb-0" th:text="${item.id()}"></p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <p class="mb-0">Item</p>
+            </div>
+
+            <div class="col-sm-9">
+                <p class="text-muted fw-medium mb-0" th:text="${item.name()}"></p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <p class="mb-0">Status</p>
+            </div>
+
+            <div class="col-sm-9">
+                <p id="itemStatus" class="text-muted fw-medium mb-0" th:text="${item.status()}"></p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <p class="mb-0">Cometário</p>
+            </div>
+
+            <div class="col-sm-9">
+                <p class="text-muted fw-medium mb-0" th:text="${item.comment()}"></p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <p class="mb-0">Última Atualização</p>
+            </div>
+
+            <div class="col-sm-9">
+                <p class="text-muted fw-medium mb-0" th:text="${item.updated()}"></p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <p class="mb-0">Caixa</p>
+            </div>
+
+            <div class="col-sm-9 d-flex">
+                <a class="text-muted fw-medium mb-0 w-25" th:href="@{'./../box/' + ${item.boxId()}}"
+                   th:text="${item.boxId()}"></a>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <p class="mb-0">Estoque</p>
+            </div>
+
+            <div class="col-sm-9">
+                <p class="text-muted fw-medium mb-0" th:text="${item.warehouse()}"></p>
+            </div>
+        </div>
+
+        <div class="row d-flex flex-column align-content-center my-3">
+            <button type="button" class="btn btn-lg btn-outline-info mb-2 col-9" data-bs-toggle="modal"
+                    data-bs-target="#update-item-modal">
+                Editar
+            </button>
+            <button type="button" class="btn btn-lg btn-outline-danger col-9" data-bs-toggle="modal"
+                    data-bs-target="#delete-item-modal">
+                Remover
+            </button>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <table class="table table-hover table-sm text-center">
+            <thead>
+            <tr class="table-secondary">
+                <th colspan="4" class=" text-center fs-3"><h3>Histórico</h3></th>
+            </tr>
+            <tr class="table-secondary">
+                <th scope="col" class="col-auto">
+                    Comentário
+                </th>
+                <th scope="col" class="col-2">
+                    Status
+                </th>
+                <th scope="col" class="col-1">
+                    Caixa
+                </th>
+                <th scope="col" class="col-2">
+                    Data
+                </th>
+            </thead>
+            <tbody th:each="movement : ${movements}">
+            <tr>
+                <td th:text="${movement.description()}"></td>
+                <td th:text="${movement.status()}"></td>
+                <td th:text="${movement.box()}"></td>
+                <td th:text="${movement.date()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--Move Item Modal-->
+    <div th:replace="~{views/fragments/update-item-modal}"></div>
+
+    <!--Delete Item Modal-->
+    <div th:replace="~{views/fragments/delete-item-modal}"></div>
+</div>
+</body>
+</html>

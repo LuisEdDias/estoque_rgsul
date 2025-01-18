@@ -1,8 +1,8 @@
 package br.net.rgsul.estoque.entities;
 
 import java.io.File;
-import java.util.List;
 
-public class FileDownload {
+public class StockCheckFileDownload {
     public static File file;
+    public static File itemsToBeChecked;
 }
