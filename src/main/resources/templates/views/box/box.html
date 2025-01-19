@@ -30,26 +30,31 @@
 
                                 <p class="mb-0 text-uppercase d-none d-lg-block"><span class="ms-3 me-4">|</span></p>
 
-                                <div class="d-flex flex-wrap justify-content-center gap-3">
-                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                            data-bs-target="#delete-box-modal">
-                                        Remover Caixa
-                                    </button>
-
-                                    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal"
-                                            data-bs-target="#update-box-modal">
-                                        Editar
-                                    </button>
-
-                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                            data-bs-target="#check-box-modal">
-                                        Conferir
-                                    </button>
-
-                                    <button type="button" data-bs-toggle="modal" data-bs-target="#move-box-modal"
-                                            class="btn btn-light border border-black text-dark">
-                                        Mover
-                                    </button>
+                                <div class="d-inline-flex flex-wrap justify-content-between col-lg-7">
+                                    <div class="col-5 col-lg-3 d-flex align-text-middle p-2">
+                                        <button type="button" class="btn btn-outline-danger h-100 w-100 p-1" data-bs-toggle="modal"
+                                                data-bs-target="#delete-box-modal">
+                                            Remover Caixa
+                                        </button>
+                                    </div>
+                                    <div class="col-5 col-lg-3 d-flex align-text-middle p-2">
+                                        <button type="button" class="btn btn-outline-info h-100 w-100 p-1" data-bs-toggle="modal"
+                                                data-bs-target="#update-box-modal">
+                                            Editar
+                                        </button>
+                                    </div>
+                                    <div class="col-5 col-lg-3 d-flex align-text-middle p-2">
+                                        <button type="button" class="btn btn-outline-success h-100 w-100 p-1" data-bs-toggle="modal"
+                                                data-bs-target="#check-box-modal">
+                                            Conferir
+                                        </button>
+                                    </div>
+                                    <div class="col-5 col-lg-3 d-flex align-text-middle p-2">
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#move-box-modal"
+                                                class="btn btn-light border border-black text-dark h-100 w-100 p-1">
+                                            Mover
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -59,31 +64,31 @@
                             <thead class="sticky-top">
                             <tr>
                                 <th colspan="100%">
-                                    <div class="row justify-content-between px-2">
-                                        <div class="col-3">
-                                            <button type="button" class="btn btn-success w-75" data-bs-toggle="modal"
+                                    <div class="row justify-content-between">
+                                        <div class="col-5 col-lg-3 d-flex align-text-middle p-2">
+                                            <button type="button" class="btn btn-success h-100 w-100" data-bs-toggle="modal"
                                                     data-bs-target="#new-item-modal">
                                                 Adicionar Item
                                             </button>
                                         </div>
-                                        <div class="col-3">
-                                            <button type="button" class="btn btn-primary w-75" data-bs-toggle="modal"
+                                        <div class="col-5 col-lg-3 d-flex align-text-middle p-2">
+                                            <button type="button" class="btn btn-primary h-100 w-100" data-bs-toggle="modal"
                                                     data-bs-target="#add-items-by-file-modal">
                                                 Adicionar Lista
                                             </button>
                                         </div>
 
-                                        <div class="col-3">
-                                            <button type="button" class="btn btn-outline-success w-75">
+                                        <div class="col-5 col-lg-3 d-flex align-text-middle p-2">
+                                            <button type="button" class="btn btn-outline-success h-100 w-100">
                                                 <a th:href="@{'/box/' + ${box.id()} + '/export'}" class="text-reset">
                                                     Exportar Excel
                                                 </a>
                                             </button>
                                         </div>
 
-                                        <div class="col-3">
+                                        <div class="col-5 col-lg-3 d-flex align-text-middle p-2">
                                             <button type="button" data-bs-toggle="modal" data-bs-target="#move-all-items-modal"
-                                                    class="btn btn-light border border-black text-dark">
+                                                    class="btn btn-light border border-black text-dark w-100">
                                                 Mover Selecionados
                                             </button>
                                         </div>
